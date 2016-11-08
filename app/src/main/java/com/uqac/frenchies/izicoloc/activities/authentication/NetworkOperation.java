@@ -1,4 +1,4 @@
-package com.uqac.frenchies.izicoloc.activities;
+package com.uqac.frenchies.izicoloc.activities.authentication;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;

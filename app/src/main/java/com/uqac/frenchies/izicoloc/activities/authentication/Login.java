@@ -1,8 +1,7 @@
-package com.uqac.frenchies.izicoloc.activities;
+package com.uqac.frenchies.izicoloc.activities.authentication;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
@@ -12,6 +11,7 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ImageSpan;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 
 import com.facebook.CallbackManager;
@@ -25,14 +25,15 @@ import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.uqac.frenchies.izicoloc.R;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.Arrays;
 import java.util.concurrent.ExecutionException;
 
@@ -42,7 +43,9 @@ public class Login extends AppCompatActivity {
 
     private CallbackManager callbackManager;
 
-    private LoginButton loginButton;
+    private LoginButton loginButtonFacebook;
+
+    private SignInButton loginButtonGoogle;
 
     private TextView textView;
 
@@ -52,6 +55,8 @@ public class Login extends AppCompatActivity {
 
     private GoogleApiClient mGoogleApiClient;
 
+    private final int RC_SIGN_IN = 1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,7 +64,9 @@ public class Login extends AppCompatActivity {
         AppEventsLogger.activateApp(this);
         callbackManager = CallbackManager.Factory.create();
 
-
+        //***************************************************************************************//
+        //*************************************FACEBOOK******************************************//
+        //***************************************************************************************//
 
         profileTracker = new ProfileTracker() {
             @Override
@@ -81,8 +88,8 @@ public class Login extends AppCompatActivity {
 
         textView = ((TextView)findViewById(R.id.textViewInfo));
 
-        loginButton = (LoginButton)findViewById(R.id.login_button);
-        loginButton.setReadPermissions(Arrays.asList("public_profile", "email", "user_birthday", "user_friends"));
+        loginButtonFacebook = (LoginButton)findViewById(R.id.login_button);
+        loginButtonFacebook.setReadPermissions(Arrays.asList("public_profile", "email", "user_birthday", "user_friends"));
         LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
 
             @Override
@@ -101,6 +108,18 @@ public class Login extends AppCompatActivity {
             }
         });
 
+        //***************************************************************************************//
+        //*************************************GOOGLE********************************************//
+        //***************************************************************************************//
+
+        loginButtonGoogle = (SignInButton) findViewById(R.id.sign_in_button);
+        loginButtonGoogle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                signIn();
+            }
+        });
+
         // Configure sign-in to request the user's ID, email address, and basic
         // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -109,18 +128,22 @@ public class Login extends AppCompatActivity {
 
         // Build a GoogleApiClient with access to the Google Sign-In API and the
         // options specified by gso.
-//        mGoogleApiClient = new GoogleApiClient.Builder(this)
-//                .enableAutoManage(this /* FragmentActivity */, new GoogleApiClient.OnConnectionFailedListener() {
-//                    @Override
-//                    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-//
-//                    }
-//                })
-//                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-//                .build();
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .enableAutoManage(this /* FragmentActivity */, new GoogleApiClient.OnConnectionFailedListener() {
+                    @Override
+                    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
-
+                    }
+                })
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .build();
     }
+
+    private void signIn() {
+        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+        startActivityForResult(signInIntent, RC_SIGN_IN);
+    }
+
 
     public static Bitmap getFacebookProfilePicture(String userID){
         Bitmap bitmap = null;
@@ -132,11 +155,25 @@ public class Login extends AppCompatActivity {
         return bitmap;
     }
 
-
+    private void handleSignInResult(GoogleSignInResult result) {
+        Log.d(TAG, "handleSignInResult:" + result.isSuccess());
+        if (result.isSuccess()) {
+            // Signed in successfully, show authenticated UI.
+            GoogleSignInAccount acct = result.getSignInAccount();
+            textView.setText("Signed with google : "+ acct.getDisplayName());
+        } else {
+            // Signed out, show unauthenticated UI.
+        }
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == RC_SIGN_IN) {
+            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+            handleSignInResult(result);
+        }
+
         callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
