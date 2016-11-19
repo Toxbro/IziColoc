@@ -2,65 +2,104 @@ package com.uqac.frenchies.izicoloc.activities.authentication;
 
 import android.graphics.drawable.Drawable;
 
-import java.io.Serializable;
+import com.google.android.gms.common.api.GoogleApiClient;
+
+import java.util.Date;
 
 /**
- * Created by Thomas on 2016-11-08.
+ * Created by Thomas on 2016-11-15.
  */
 
-public class Profile implements Serializable{
+public class Profile {
 
-    private String last_name;
+    private static String firstname;
 
-    private String first_name;
+    private static String lastname;
 
-    private String username;
+    private static String email;
 
-    private String email;
+    private static String username;
 
-    private Drawable picture;
+    private static String phone;
 
-    public Profile(){
+    private static Date birthday;
 
+    private static Drawable picture;
+
+    private static String isLoggedWith;
+
+    private static GoogleApiClient mGoogleApiClient;
+
+
+    public static String getFirstname() {
+        return firstname;
     }
 
-    public String getLast_name() {
-        return last_name;
+    public static void setFirstname(String firstname) {
+        Profile.firstname = firstname;
     }
 
-    public void setLast_name(String last_name) {
-        this.last_name = last_name;
+    public static String getLastname() {
+        return lastname;
     }
 
-    public String getFirst_name() {
-        return first_name;
+    public static void setLastname(String lastname) {
+        Profile.lastname = lastname;
     }
 
-    public void setFirst_name(String first_name) {
-        this.first_name = first_name;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getEmail() {
+    public static String getEmail() {
         return email;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public static void setEmail(String email) {
+        Profile.email = email;
     }
 
-    public Drawable getPicture() {
+    public static String getUsername() {
+        return username;
+    }
+
+    public static void setUsername(String username) {
+        Profile.username = username;
+    }
+
+    public static String getPhone() {
+        return phone;
+    }
+
+    public static void setPhone(String phone) {
+        Profile.phone = phone;
+    }
+
+    public static Date getBirthday() {
+        return birthday;
+    }
+
+    public static void setBirthday(Date birthday) {
+        Profile.birthday = birthday;
+    }
+
+    public static Drawable getPicture() {
         return picture;
     }
 
-    public void setPicture(Drawable picture) {
-        this.picture = picture;
+    public static void setPicture(Drawable picture) {
+        Profile.picture = picture;
+    }
+
+    public static String getIsLoggedWith() {
+        return isLoggedWith;
+    }
+
+    public static void setIsLoggedWith(String isLoggedWith) {
+        Profile.isLoggedWith = isLoggedWith;
+    }
+
+    public static GoogleApiClient getmGoogleApiClient() {
+        return mGoogleApiClient;
+    }
+
+    public static void setmGoogleApiClient(GoogleApiClient mGoogleApiClient) {
+        Profile.mGoogleApiClient = mGoogleApiClient;
     }
 }
