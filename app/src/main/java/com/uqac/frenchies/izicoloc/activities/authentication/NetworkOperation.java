@@ -17,11 +17,16 @@ public class NetworkOperation extends AsyncTask<String,Integer,Bitmap> {
 
     @Override
     protected Bitmap doInBackground(String... params) {
-
-        String userID = params[0];
+        String imageURL_String = params[0];
         URL imageURL = null;
         try {
-            imageURL = new URL("https://graph.facebook.com/" + userID + "/picture?type=large");
+            if (imageURL_String.equals("facebook")){
+                String userID = params[1];
+                imageURL = new URL("https://graph.facebook.com/" + userID + "/picture?type=large");
+            }
+            else {
+                imageURL = new URL(imageURL_String);
+            }
 
             bitmap = BitmapFactory.decodeStream(imageURL.openConnection().getInputStream());
         } catch (IOException e) {

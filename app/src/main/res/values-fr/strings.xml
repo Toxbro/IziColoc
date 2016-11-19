@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">IziColoc</string>
+    <string name="action_settings">Configuration</string>
+    <string name="action_sign_in">S\'authentifier ou s\'inscrire</string>
+    <string name="action_sign_in_short">S\'authentifier</string>
+    <string name="error_field_required">Ce champs est requis</string>
+    <string name="error_incorrect_password">Le mot de passe est incorrect</string>
+    <string name="error_invalid_email">L\'email n\'est pas valide</string>
+    <string name="error_invalid_password">Le mot de passe est trop court</string>
+    <string name="facebook_app_id"></string>
+    <string name="navigation_drawer_close">Fermer la menu de navigation</string>
+    <string name="navigation_drawer_open">Ouvrir le menu de navigation</string>
+    <string name="permission_rationale">Nous avons besoin d\'acceder aux contacts pour l\'autocomplétion des adresses mail</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Mot de passe (optionnel)</string>
+    <string name="title_activity_login">S\'authentifier</string>
+    <string name="title_activity_main">Activité principale</string>
+    <string name="title_activity_menu">Menu</string>
+    <string name="error_sign_in_failed">L\'authentification a échoué</string>
+    <string name="profile_picture">Photo de profil</string>
+    <string name="logout">Déconnecter</string>
+</resources>
