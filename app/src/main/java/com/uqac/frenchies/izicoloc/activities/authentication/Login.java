@@ -201,9 +201,9 @@ public class Login extends AppCompatActivity {
                             // Application code
                             facebookEmail = object.getString("email");
                             facebookBirthday = object.getString("birthday"); // 01/31/1980 format
-                            com.uqac.frenchies.izicoloc.activities.authentication.Profile.setEmail(facebookEmail);
+                            com.uqac.frenchies.izicoloc.activities.classes.Profile.setEmail(facebookEmail);
                             try {
-                                com.uqac.frenchies.izicoloc.activities.authentication.Profile.setBirthday(DateFormat.getDateInstance(DateFormat.SHORT, Locale.FRANCE).parse(facebookBirthday));
+                                com.uqac.frenchies.izicoloc.activities.classes.Profile.setBirthday(DateFormat.getDateInstance(DateFormat.SHORT, Locale.FRANCE).parse(facebookBirthday));
                             } catch (ParseException e) {
                                 e.printStackTrace();
                             }
@@ -222,18 +222,18 @@ public class Login extends AppCompatActivity {
     private boolean isConnected(){
         if (isConnectedWithGoogle) {
             String fullName = googleSignInAccount.getDisplayName();
-            com.uqac.frenchies.izicoloc.activities.authentication.Profile.setFirstname(fullName.split(" ")[0]);
-            com.uqac.frenchies.izicoloc.activities.authentication.Profile.setLastname(fullName.split(" ")[1]);
+            com.uqac.frenchies.izicoloc.activities.classes.Profile.setFirstname(fullName.split(" ")[0]);
+            com.uqac.frenchies.izicoloc.activities.classes.Profile.setLastname(fullName.split(" ")[1]);
             Log.d(TAG, "Email :" + googleSignInAccount.getEmail());
 
-            com.uqac.frenchies.izicoloc.activities.authentication.Profile.setEmail(googleSignInAccount.getEmail());
+            com.uqac.frenchies.izicoloc.activities.classes.Profile.setEmail(googleSignInAccount.getEmail());
             if (googleSignInAccount.getPhotoUrl() != null)
-                com.uqac.frenchies.izicoloc.activities.authentication.Profile.setPicture(new BitmapDrawable(getResources(), getGoogleProfilePicture(googleSignInAccount.getPhotoUrl().toString())));
+                com.uqac.frenchies.izicoloc.activities.classes.Profile.setPicture(new BitmapDrawable(getResources(), getGoogleProfilePicture(googleSignInAccount.getPhotoUrl().toString())));
             else
-                com.uqac.frenchies.izicoloc.activities.authentication.Profile.setPicture(getResources().getDrawable(R.mipmap.ic_defaultgoogle));
-            com.uqac.frenchies.izicoloc.activities.authentication.Profile.setIsLoggedWith("google");
+                com.uqac.frenchies.izicoloc.activities.classes.Profile.setPicture(getResources().getDrawable(R.mipmap.ic_defaultgoogle));
+            com.uqac.frenchies.izicoloc.activities.classes.Profile.setIsLoggedWith("google");
 
-            com.uqac.frenchies.izicoloc.activities.authentication.Profile.setmGoogleApiClient(mGoogleApiClient);
+            com.uqac.frenchies.izicoloc.activities.classes.Profile.setmGoogleApiClient(mGoogleApiClient);
             return true;
         }
         else if (isConnectedWithFacebook){
@@ -243,17 +243,17 @@ public class Login extends AppCompatActivity {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            com.uqac.frenchies.izicoloc.activities.authentication.Profile.setFirstname(Profile.getCurrentProfile().getFirstName());
-            com.uqac.frenchies.izicoloc.activities.authentication.Profile.setLastname(Profile.getCurrentProfile().getLastName());
-            com.uqac.frenchies.izicoloc.activities.authentication.Profile.setEmail(facebookEmail);
-            com.uqac.frenchies.izicoloc.activities.authentication.Profile.setPicture(new BitmapDrawable(getResources(), getFacebookProfilePicture(Profile.getCurrentProfile().getId())));
+            com.uqac.frenchies.izicoloc.activities.classes.Profile.setFirstname(Profile.getCurrentProfile().getFirstName());
+            com.uqac.frenchies.izicoloc.activities.classes.Profile.setLastname(Profile.getCurrentProfile().getLastName());
+            com.uqac.frenchies.izicoloc.activities.classes.Profile.setEmail(facebookEmail);
+            com.uqac.frenchies.izicoloc.activities.classes.Profile.setPicture(new BitmapDrawable(getResources(), getFacebookProfilePicture(Profile.getCurrentProfile().getId())));
             try {
                 if (facebookBirthday != null)
-                    com.uqac.frenchies.izicoloc.activities.authentication.Profile.setBirthday(DateFormat.getDateInstance(DateFormat.SHORT, Locale.FRANCE).parse(facebookBirthday));
+                    com.uqac.frenchies.izicoloc.activities.classes.Profile.setBirthday(DateFormat.getDateInstance(DateFormat.SHORT, Locale.FRANCE).parse(facebookBirthday));
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            com.uqac.frenchies.izicoloc.activities.authentication.Profile.setIsLoggedWith("facebook");
+            com.uqac.frenchies.izicoloc.activities.classes.Profile.setIsLoggedWith("facebook");
             return true;
         }
         else {

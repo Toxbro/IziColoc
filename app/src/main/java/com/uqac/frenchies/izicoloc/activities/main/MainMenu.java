@@ -2,8 +2,6 @@ package com.uqac.frenchies.izicoloc.activities.main;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.view.Menu;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -22,7 +20,7 @@ import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.uqac.frenchies.izicoloc.R;
 import com.uqac.frenchies.izicoloc.activities.authentication.Login;
-import com.uqac.frenchies.izicoloc.activities.authentication.Profile;
+import com.uqac.frenchies.izicoloc.activities.classes.Profile;
 
 public class MainMenu extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {

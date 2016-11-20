@@ -1,4 +1,4 @@
-package com.uqac.frenchies.izicoloc.activities.authentication;
+package com.uqac.frenchies.izicoloc.activities.classes;
 
 import android.graphics.drawable.Drawable;
 
