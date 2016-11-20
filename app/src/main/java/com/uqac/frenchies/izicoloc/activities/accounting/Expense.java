@@ -1,4 +1,7 @@
-package com.uqac.frenchies.izicoloc;
+package com.uqac.frenchies.izicoloc.activities.accounting;
+
+import com.uqac.frenchies.izicoloc.activities.classes.Colocataire;
+import com.uqac.frenchies.izicoloc.activities.classes.Profile;
 
 /**
  * Created by quentin on 16-11-17.
@@ -6,17 +9,20 @@ package com.uqac.frenchies.izicoloc;
 
 public class Expense {
 
-    private Profile owner;
+    private Colocataire owner;
     private int amount;
-    private Profile[] shares;
+    private Colocataire[] shares;
 
-    public Expense(Profile owner, Profile[] shares, int amount){
-        this.owner = owner;
+    public Expense(Colocataire[] shares, int amount){
+        for(Colocataire c : shares){
+            if(c.getId() == Profile.getId())
+                this.owner = c;
+        }
         this.shares = shares;
         this.amount = amount;
     }
 
-    public Profile getOwner() {
+    public Colocataire getOwner() {
         return owner;
     }
 
@@ -24,7 +30,7 @@ public class Expense {
         return amount;
     }
 
-    public Profile[] getShares() {
+    public Colocataire[] getShares() {
         return shares;
     }
 

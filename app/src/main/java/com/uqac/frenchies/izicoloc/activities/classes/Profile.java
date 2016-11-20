@@ -1,4 +1,4 @@
-package com.uqac.frenchies.izicoloc.activities.authentication;
+package com.uqac.frenchies.izicoloc.activities.classes;
 
 import android.graphics.drawable.Drawable;
 
@@ -23,6 +23,8 @@ public class Profile {
     private static String phone;
 
     private static Date birthday;
+
+    private static int id;
 
     private static Drawable picture;
 
@@ -78,6 +80,10 @@ public class Profile {
     public static void setBirthday(Date birthday) {
         Profile.birthday = birthday;
     }
+
+    public static int getId() { return id; }
+
+    public static void setId(int id) { Profile.id = id; }
 
     public static Drawable getPicture() {
         return picture;

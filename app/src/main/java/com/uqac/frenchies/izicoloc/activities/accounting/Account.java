@@ -1,4 +1,6 @@
-package com.uqac.frenchies.izicoloc;
+package com.uqac.frenchies.izicoloc.activities.accounting;
+
+import com.uqac.frenchies.izicoloc.activities.classes.Colocataire;
 
 import java.util.HashMap;
 
@@ -8,15 +10,15 @@ import java.util.HashMap;
 
 public class Account {
 
-    private Profile owner;
+    private Colocataire owner;
     private int balance;
-    private HashMap<Profile, Integer> shares;
+    private HashMap<Colocataire, Integer> shares;
 
     public boolean addExpense(Expense ex){
         boolean result = true;
-        for(Profile p : ex.getShares()){
-            if(shares.containsKey(p) && result)
-                shares.put(p,shares.get(p)+ex.getAmount());
+        for(Colocataire c : ex.getShares()){
+            if(shares.containsKey(c) && result)
+                shares.put(c,shares.get(c)+ex.getAmount());
             else
                 result = false;
         }

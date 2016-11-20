@@ -1,4 +1,4 @@
-package com.uqac.frenchies.izicoloc;
+package com.uqac.frenchies.izicoloc.activities.classes;
 
 import java.util.ArrayList;
 

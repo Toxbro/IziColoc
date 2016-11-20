@@ -1,18 +1,30 @@
-package com.uqac.frenchies.izicoloc;
+package com.uqac.frenchies.izicoloc.activities.accounting;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class AccountingActivity extends AppCompatActivity {
+import com.uqac.frenchies.izicoloc.R;
+import com.uqac.frenchies.izicoloc.activities.classes.Profile;
+
+public class AccountingActivity extends AppCompatActivity{
+
+    //This is our tablayout
+    private TabLayout tabLayout;
+
+    //This is our viewPager
+    private ViewPager viewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,16 +44,27 @@ public class AccountingActivity extends AppCompatActivity {
             }
         });
 
-        Profile.setFirst_name("Quentin");
-        Profile.setLast_name("Rollin");
+        Profile.setFirstname("Quentin");
+        Profile.setLastname("Rollin");
+
+        //Initializing viewPager
+        viewPager = (ViewPager) findViewById(R.id.pager);
+
+        SectionsPagerAdapter adapter = new SectionsPagerAdapter(getSupportFragmentManager());
+
+        //Adding adapter to pager
+        viewPager.setAdapter(adapter);
+
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabLayout);
+        tabLayout.setupWithViewPager(viewPager);
     }
 
-    @Override
+    /*@Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_accounting, menu);
         return true;
-    }
+    }*/
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -71,26 +94,21 @@ public class AccountingActivity extends AppCompatActivity {
 
         @Override
         public Fragment getItem(int position) {
-            // getItem is called to instantiate the fragment for the given page.
-            // Return a PlaceholderFragment (defined as a static inner class below).
-            return AccountingFragment.newInstance(position + 1);
+            return AccountingFragment.newInstance(position);
         }
 
         @Override
         public int getCount() {
-            // Show 3 total pages.
-            return 3;
+            return 2;
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return "SECTION 1";
+                    return "Personal";
                 case 1:
-                    return "SECTION 2";
-                case 2:
-                    return "SECTION 3";
+                    return "Common";
             }
             return null;
         }
