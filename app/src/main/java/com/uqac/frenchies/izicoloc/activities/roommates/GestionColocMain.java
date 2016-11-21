@@ -25,7 +25,7 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-public class gestion_coloc_main extends AppCompatActivity {
+public class GestionColocMain extends AppCompatActivity {
     private int idUser;
     private String codeColoc;
     private String getUrl = "http://maelios.zapto.org/izicoloc/getUser.php";
@@ -71,12 +71,12 @@ public class gestion_coloc_main extends AppCompatActivity {
                                 codeColoc = tmp[3];
                             }
                             if(codeColoc.isEmpty()){
-                                Intent intent = new Intent(gestion_coloc_main.this, gestion_coloc_accueil.class);
+                                Intent intent = new Intent(GestionColocMain.this, GestionColocAccueil.class);
                                 intent.putExtra("idUser",idUser);
                                 startActivity(intent);
                             }
                             else{
-                                Intent intent = new Intent(gestion_coloc_main.this, gestion_coloc_affiche.class);
+                                Intent intent = new Intent(GestionColocMain.this, GestionColocAffiche.class);
                                 intent.putExtra("idUser",idUser);
                                 intent.putExtra("codeColoc",codeColoc);
                                 startActivity(intent);

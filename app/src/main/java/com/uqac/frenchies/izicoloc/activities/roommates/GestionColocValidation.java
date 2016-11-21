@@ -19,7 +19,7 @@ import com.uqac.frenchies.izicoloc.R;
 import java.util.HashMap;
 import java.util.Map;
 
-public class gestion_coloc_validation extends AppCompatActivity {
+public class GestionColocValidation extends AppCompatActivity {
     private int idUser;
     private TextView code;
     private String codeColoc;
@@ -40,7 +40,7 @@ public class gestion_coloc_validation extends AppCompatActivity {
         cancelColoc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                gestion_coloc_validation.super.finish();
+                GestionColocValidation.super.finish();
             }
         });
 
@@ -50,7 +50,7 @@ public class gestion_coloc_validation extends AppCompatActivity {
                 StringRequest request = new StringRequest(Request.Method.POST, setUrl, new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                            Intent intent = new Intent(getApplicationContext(), gestion_coloc_main.class);
+                            Intent intent = new Intent(getApplicationContext(), GestionColocMain.class);
                             /*intent.putExtra("codeColoc",codeColoc);
                             intent.putExtra("idUser",idUser);*/
                             startActivity(intent);

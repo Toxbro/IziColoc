@@ -8,7 +8,7 @@ import android.widget.Button;
 
 import com.uqac.frenchies.izicoloc.R;
 
-public class gestion_coloc_accueil extends AppCompatActivity {
+public class GestionColocAccueil extends AppCompatActivity {
     private int idUser;
     private Button createColoc, joinColoc;
     @Override
@@ -21,7 +21,7 @@ public class gestion_coloc_accueil extends AppCompatActivity {
         createColoc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), gestion_coloc_affiche.class);
+                Intent intent = new Intent(getApplicationContext(), GestionColocAffiche.class);
                 intent.putExtra("idUser", idUser);
                 startActivity(intent);
             }
@@ -30,7 +30,7 @@ public class gestion_coloc_accueil extends AppCompatActivity {
         joinColoc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), gestion_coloc_detection.class);
+                Intent intent = new Intent(getApplicationContext(), GestionColocDetection.class);
                 intent.putExtra("idUser",idUser);
                 startActivity(intent);
             }

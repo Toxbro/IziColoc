@@ -31,7 +31,7 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-public class gestion_coloc_affiche extends AppCompatActivity {
+public class GestionColocAffiche extends AppCompatActivity {
     private String codeColoc;
     private int idUser;
     private TextView code;
@@ -66,7 +66,7 @@ public class gestion_coloc_affiche extends AppCompatActivity {
                 StringRequest request = new StringRequest(Request.Method.POST, delUrl, new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Intent intent = new Intent(getApplicationContext(), gestion_coloc_main.class);
+                        Intent intent = new Intent(getApplicationContext(), GestionColocMain.class);
                         startActivity(intent);
                     }
                 }, new Response.ErrorListener() {

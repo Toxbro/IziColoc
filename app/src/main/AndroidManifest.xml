@@ -39,11 +39,11 @@
             android:name=".activities.main.MainMenu"
             android:label="@string/title_activity_menu"
             android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".activities.roommates.gestion_coloc_accueil"/>
-        <activity android:name=".activities.roommates.gestion_coloc_affiche"/>
-        <activity android:name=".activities.roommates.gestion_coloc_detection"/>
-        <activity android:name=".activities.roommates.gestion_coloc_main"/>
-        <activity android:name=".activities.roommates.gestion_coloc_validation"/>
+        <activity android:name=".activities.roommates.GestionColocAccueil"/>
+        <activity android:name=".activities.roommates.GestionColocAffiche"/>
+        <activity android:name=".activities.roommates.GestionColocDetection"/>
+        <activity android:name=".activities.roommates.GestionColocMain"/>
+        <activity android:name=".activities.roommates.GestionColocValidation"/>
 
         <!--<activity
             android:name=".activities.accounting."-->

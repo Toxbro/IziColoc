@@ -27,7 +27,7 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-public class gestion_coloc_detection extends AppCompatActivity {
+public class GestionColocDetection extends AppCompatActivity {
     private int idUser;
     private Button scanColoc;
     private Button checkColoc;
@@ -76,7 +76,7 @@ public class gestion_coloc_detection extends AppCompatActivity {
                                             JSONObject jo = new JSONObject(response);
                                             JSONArray colocs = jo.getJSONArray("colocs");
                                             if(colocs.length()!=0){
-                                                Intent intent = new Intent(getApplicationContext(), gestion_coloc_validation.class);
+                                                Intent intent = new Intent(getApplicationContext(), GestionColocValidation.class);
                                                 intent.putExtra("codeColoc",codeColoc);
                                                 intent.putExtra("idUser",idUser);
                                                 startActivity(intent);
@@ -139,7 +139,7 @@ public class gestion_coloc_detection extends AppCompatActivity {
                                     JSONObject jo = new JSONObject(response);
                                     JSONArray colocs = jo.getJSONArray("colocs");
                                     if(colocs.length()!=0){
-                                        Intent intent = new Intent(getApplicationContext(), gestion_coloc_validation.class);
+                                        Intent intent = new Intent(getApplicationContext(), GestionColocValidation.class);
                                         intent.putExtra("codeColoc",code);
                                         intent.putExtra("idUser",idUser);
                                         startActivity(intent);
