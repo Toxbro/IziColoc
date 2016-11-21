@@ -1,4 +1,4 @@
-package com.uqac.frenchies.izicoloc.activities.authentication;
+package com.uqac.frenchies.izicoloc.activities.classes;
 
 import android.graphics.drawable.Drawable;
 
@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Created by Thomas on 2016-11-08.
  */
 
-public class Profile implements Serializable{
+public class Colocataire implements Serializable{
 
     private String last_name;
 
@@ -20,7 +20,7 @@ public class Profile implements Serializable{
 
     private Drawable picture;
 
-    public Profile(){
+    public Colocataire(){
 
     }
 
