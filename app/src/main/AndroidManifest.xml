@@ -39,6 +39,12 @@
             android:name=".activities.main.MainMenu"
             android:label="@string/title_activity_menu"
             android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".activities.roommates.gestion_coloc_accueil"/>
+        <activity android:name=".activities.roommates.gestion_coloc_affiche"/>
+        <activity android:name=".activities.roommates.gestion_coloc_detection"/>
+        <activity android:name=".activities.roommates.gestion_coloc_main"/>
+        <activity android:name=".activities.roommates.gestion_coloc_validation"/>
+
         <!--<activity
             android:name=".activities.accounting."-->
     </application>
