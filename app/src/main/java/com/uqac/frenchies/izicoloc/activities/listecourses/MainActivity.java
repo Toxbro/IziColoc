@@ -78,63 +78,13 @@ public class MainActivity extends AppCompatActivity {
         listeCourses = (ListView) findViewById(R.id.listView); //Récupération de la listView
         listeSuggestions = (GridView) findViewById(R.id.gridView); //Récupération de la gridView
 
-        courses = initialiserCourses();
+        donnees = new ArrayList<String>();
+
+        courses = new ArrayList<Course>();
         initialiserListe();
 
         suggestions = initialiserSuggestions();
         initialiserGrid();
-    }
-
-    //Clic sur un item de la liste
-    class ItemList implements AdapterView.OnItemClickListener
-    {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id)
-        {
-            //Récupération de l'élément cliqué
-            ViewGroup vg = (ViewGroup) view;
-            TextView tv = (TextView)vg.findViewById(R.id.produit);
-            //Recherche dans la liste
-            for(int i=0 ; i<courses.size() ; i++)
-                if(courses.get(i).getProduit().equals(tv.getText().toString()))
-                {
-                    //Changement de couleur
-                    if(courses.get(i).getColor() == Color.RED)
-                        courses.get(i).setColor(Color.GREEN);
-                    else
-                        courses.get(i).setColor(Color.RED);
-                    break;
-                }
-            listAdapter.notifyDataSetChanged();
-        }
-    }
-
-    //Clic sur un item de la liste
-    class ItemGrid implements AdapterView.OnItemClickListener
-    {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id)
-        {
-            //Récupération de l'élément cliqué
-            ViewGroup vg = (ViewGroup) view;
-            TextView tv = (TextView)vg.findViewById(R.id.produit);
-            //Recherche dans la liste
-            for(int i=0 ; i<suggestions.size() ; i++)
-                if(suggestions.get(i).getProduit().equals(tv.getText().toString()))
-                {
-                    courses.add(suggestions.get(i));
-                    suggestions.remove(i);
-                    break;
-                }
-            gridAdapter.notifyDataSetChanged();
-        }
-    }
-
-    private List<Course> initialiserCourses()
-    {
-        List<Course> initCourse = new ArrayList<Course>();
-        initCourse.add(new Course(Color.RED, "Invisible", "I'm batman"));
-        return initCourse;
     }
 
     private List<Course> initialiserSuggestions()
@@ -156,6 +106,7 @@ public class MainActivity extends AppCompatActivity {
         listeCourses.setTextFilterEnabled(true);
 
         listeCourses.setOnItemClickListener(new ItemList());
+        listeCourses.setOnItemLongClickListener(new LongItemList());
     }
 
     private void initialiserGrid()
@@ -204,9 +155,11 @@ public class MainActivity extends AppCompatActivity {
                     {
                         String quant = input.getText().toString();
                         courses.get(courses.size()-1).setQuantite(quant);
-                        listAdapter.notifyDataSetChanged();
+
                         donnees.add(courses.get(courses.size()-1).getProduit());
                         donnees.add(courses.get(courses.size()-1).getQuantite());
+
+                        listAdapter.notifyDataSetChanged();
                     }
                 })
                 .setNegativeButton("Annuler", new DialogInterface.OnClickListener()
@@ -232,7 +185,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        //****************************************getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.menu, menu);
         return true;
     }
 
@@ -261,7 +214,7 @@ public class MainActivity extends AppCompatActivity {
             {
                 case DialogInterface.BUTTON_POSITIVE:
                     courses.clear();
-                    courses = initialiserCourses();
+                    courses = new ArrayList<Course>();
                     initialiserListe();
                     break;
 
@@ -270,4 +223,85 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     };
+
+    //Clic sur un item de la liste
+    class ItemList implements AdapterView.OnItemClickListener
+    {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+        {
+            //Récupération de l'élément cliqué
+            ViewGroup vg = (ViewGroup) view;
+            TextView tv = (TextView)vg.findViewById(R.id.produit);
+            //Recherche dans la liste
+            for(int i=0 ; i<courses.size() ; i++)
+                if(courses.get(i).getProduit().equals(tv.getText().toString()))
+                {
+                    //Changement de couleur
+                    if(courses.get(i).getColor() == Color.RED)
+                        courses.get(i).setColor(Color.GREEN);
+                    else
+                        courses.get(i).setColor(Color.RED);
+                    break;
+                }
+            listAdapter.notifyDataSetChanged();
+        }
+    }
+
+    //Clic sur un item de la liste
+    class LongItemList implements AdapterView.OnItemLongClickListener
+    {
+
+        @Override
+        public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id)
+        {
+            //Récupération de l'élément cliqué
+            ViewGroup vg = (ViewGroup) view;
+            TextView tv = (TextView)vg.findViewById(R.id.produit);
+            //Recherche dans la liste
+            for(int i=0 ; i<courses.size() ; i++)
+                if(courses.get(i).getProduit().equals(tv.getText().toString()))
+                {
+                    final int pos = i;
+                    new AlertDialog.Builder(MainActivity.this)
+                            .setTitle("Supprimer le produit : " + courses.get(pos).getProduit())
+                            .setPositiveButton("Oui", new DialogInterface.OnClickListener()
+                            {
+                                public void onClick(DialogInterface dialog, int whichButton)
+                                {
+                                    courses.remove(pos);
+                                    listAdapter.notifyDataSetChanged();
+                                }
+                            })
+                            .setNegativeButton("Non", new DialogInterface.OnClickListener()
+                            {
+                                public void onClick(DialogInterface dialog, int whichButton){}
+                            })
+                            .show();
+                    break;
+                }
+            return true; //Vérification clic long
+        }
+    }
+
+    //Clic sur un item de la liste
+    class ItemGrid implements AdapterView.OnItemClickListener
+    {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+        {
+            //Récupération de l'élément cliqué
+            ViewGroup vg = (ViewGroup) view;
+            TextView tv = (TextView)vg.findViewById(R.id.produit);
+            //Recherche dans la liste
+            for(int i=0 ; i<suggestions.size() ; i++)
+                if(suggestions.get(i).getProduit().equals(tv.getText().toString()))
+                {
+                    courses.add(suggestions.get(i));
+                    suggestions.remove(i);
+                    break;
+                }
+            gridAdapter.notifyDataSetChanged();
+        }
+    }
 }
