@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <FrameLayout
+        android:id="@+id/fl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:paddingBottom="5dp">
+
+        <TextView
+            android:text="Code de la Colocation : "
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView"
+            android:layout_marginLeft="5dp"
+            android:textSize="20sp"
+            />
+
+        <TextView
+            android:text="X"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/codeColoc"
+            android:layout_marginLeft="215dp"
+            android:textSize="20sp"
+            />
+    </FrameLayout>
+
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/qrCode"
+        android:layout_weight="4"/>
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"/>
+
+    <Button
+        android:text="Quitter la Colocation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/quitColoc" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+</LinearLayout>

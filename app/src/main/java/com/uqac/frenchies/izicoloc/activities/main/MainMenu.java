@@ -22,6 +22,8 @@ import com.google.android.gms.common.api.Status;
 import com.uqac.frenchies.izicoloc.R;
 import com.uqac.frenchies.izicoloc.activities.authentication.Login;
 import com.uqac.frenchies.izicoloc.activities.classes.Profile;
+import com.uqac.frenchies.izicoloc.activities.roommates.gestion_coloc_accueil;
+import com.uqac.frenchies.izicoloc.activities.roommates.gestion_coloc_main;
 
 public class MainMenu extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -51,7 +53,12 @@ public class MainMenu extends AppCompatActivity
         roommatesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                int idUser = 280;
+                Intent intent = new Intent(MainMenu.this, gestion_coloc_main.class);
+                intent.putExtra("idUser",idUser);
+                startActivity(intent);
                 //Activité de Maxime si colocation inexistante, vue globale de la colocation sinon
+
             }
         });
 
