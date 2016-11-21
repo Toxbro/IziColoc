@@ -1,22 +1,20 @@
 package com.uqac.frenchies.izicoloc.activities.accounting;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.PagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
-import android.view.Menu;
+import android.util.Log;
 import android.view.MenuItem;
 
 import com.uqac.frenchies.izicoloc.R;
 import com.uqac.frenchies.izicoloc.activities.classes.Profile;
+import com.uqac.frenchies.izicoloc.tools.Parser;
 
 public class AccountingActivity extends AppCompatActivity{
 
@@ -28,34 +26,29 @@ public class AccountingActivity extends AppCompatActivity{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        Profile.setFirstname("Quentin");
+        Profile.setLastname("Rollin");
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_accounting);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+        String path =  getFilesDir().getPath()+"/data.xml";
 
-//                getString(R.string.cost)
-            }
-        });
-
-        Profile.setFirstname("Quentin");
-        Profile.setLastname("Rollin");
+        Parser.addNode(path, "root", "expense2", "109");
 
         //Initializing viewPager
         viewPager = (ViewPager) findViewById(R.id.pager);
 
         SectionsPagerAdapter adapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
-        //Adding adapter to pager
         viewPager.setAdapter(adapter);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabLayout);
+
+        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.setupWithViewPager(viewPager);
     }
 
@@ -86,7 +79,7 @@ public class AccountingActivity extends AppCompatActivity{
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
      * one of the sections/tabs/pages.
      */
-    public class SectionsPagerAdapter extends FragmentPagerAdapter {
+    public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
 
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
@@ -94,7 +87,21 @@ public class AccountingActivity extends AppCompatActivity{
 
         @Override
         public Fragment getItem(int position) {
-            return AccountingFragment.newInstance(position);
+            Bundle bundle = new Bundle();
+            bundle.putString("path", getFilesDir().getPath()+"/data.xml");
+            switch(position){
+                case 0: {
+                    Fragment fragment = PersonalAccountingFragment.newInstance();
+                    fragment.setArguments(bundle);
+                    return fragment;
+                }
+                case 1: {
+                    Fragment fragment = CommonAccountingFragment.newInstance();
+                    fragment.setArguments(bundle);
+                    return fragment;
+                }
+            }
+            return null;
         }
 
         @Override

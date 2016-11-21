@@ -2,9 +2,10 @@ package com.uqac.frenchies.izicoloc.activities.classes;
 
 import android.graphics.drawable.Drawable;
 
-import com.google.android.gms.common.api.GoogleApiClient;
-
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * Created by Thomas on 2016-11-15.
@@ -28,10 +29,23 @@ public class Colocataire {
 
     private Drawable picture;
 
-    private String isLoggedWith;
 
-    private GoogleApiClient mGoogleApiClient;
-
+    public Colocataire(String s){
+        String[] splitted = s.split(";");
+        for(String temp : splitted){
+            String[] value = temp.split(":");
+            switch(value[0]){
+                case "Id": { this.id = Integer.parseInt(value[1]); }
+                case "Firstname": { this.firstname = value[1]; }
+                case "Lastname": { this.lastname = value[1]; }
+                case "Email": { this.email = value[1]; }
+                case "Phone": { this.phone = value[1]; }
+                case "Birthday": {
+                    DateFormat dtf = new SimpleDateFormat("dd/MM/yyyy", Locale.FRANCE);
+                    this.birthday = dtf.parse(value[1]); }
+            }
+        }
+    }
 
     public String getFirstname() { return firstname; }
 
@@ -65,11 +79,15 @@ public class Colocataire {
 
     public void setPicture(Drawable picture) { this.picture = picture; }
 
-    public String getIsLoggedWith() { return isLoggedWith; }
-
-    public void setIsLoggedWith(String isLoggedWith) { this.isLoggedWith = isLoggedWith; }
-
-    public GoogleApiClient getmGoogleApiClient() { return mGoogleApiClient; }
-
-    public void setmGoogleApiClient(GoogleApiClient mGoogleApiClient) { this.mGoogleApiClient = mGoogleApiClient; }
+    public String toString() {
+        String result = "";
+        result += "Id:"+String.valueOf(getId())+";";
+        result += "Firstname:"+getFirstname()+";";
+        result += "Lastname:"+getLastname()+";";
+        result += "Email:"+getEmail()+";";
+        result += "Phone:"+getPhone()+";";
+        DateFormat dtf = new SimpleDateFormat("dd/MM/yyyy", Locale.FRANCE);
+        result += "Birthday:"+dtf.format(getBirthday())+";";
+        return result;
+    }
 }

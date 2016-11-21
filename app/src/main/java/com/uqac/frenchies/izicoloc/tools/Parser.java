@@ -8,6 +8,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import java.io.File;
+import java.util.ArrayList;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -144,8 +145,40 @@ public class Parser {
             DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
             Document document = documentBuilder.parse(file);
+
+            NodeList nodeList = document.getElementsByTagName(node_String);
             Node node = document.getElementsByTagName(node_String).item(0);
             response = node.getFirstChild().getTextContent();
+            return response;
+        }catch (Exception e){
+            Log.e(TAG, e.getMessage());
+        }
+        return null;
+    }
+
+    public static ArrayList<String> getAllInformation(String pathToFile, String node_String){
+        try {
+            ArrayList<String> response = new ArrayList<>();
+            File file = new File(pathToFile);
+            if (!file.exists()) {
+                generate(pathToFile);
+                Log.i(TAG, "Creating new XML file : " + pathToFile);
+                return null;
+            }
+            DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
+            Document document = documentBuilder.parse(file);
+            NodeList nodeList = document.getElementsByTagName(node_String);
+
+            for (int i = 0; i < nodeList.getLength(); i++) {
+                Element e = (Element) nodeList.item(i);
+                NodeList children = e.getChildNodes();
+                String detail = "";
+                for (int j = 0; j < children.getLength(); j++) {
+                    detail += children.item(j).getNodeName()+":"+children.item(j).getTextContent()+";";
+                }
+                response.add(detail);
+            }
             return response;
         }catch (Exception e){
             Log.e(TAG, e.getMessage());
