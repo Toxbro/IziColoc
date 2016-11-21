@@ -8,7 +8,7 @@
     <string name="error_incorrect_password">Le mot de passe est incorrect</string>
     <string name="error_invalid_email">L\'email n\'est pas valide</string>
     <string name="error_invalid_password">Le mot de passe est trop court</string>
-    <string name="facebook_app_id"></string>
+    <string name="facebook_app_id">319906545032130</string>
     <string name="navigation_drawer_close">Fermer la menu de navigation</string>
     <string name="navigation_drawer_open">Ouvrir le menu de navigation</string>
     <string name="permission_rationale">Nous avons besoin d\'acceder aux contacts pour l\'autocomplétion des adresses mail</string>
