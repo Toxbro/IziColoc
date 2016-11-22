@@ -11,6 +11,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -45,6 +46,30 @@ public class MainMenu extends AppCompatActivity
         nav_user.setText(Profile.getFirstname()+" "+ Profile.getLastname());
         ImageView imageView = (ImageView)hView.findViewById(R.id.imageView);
         imageView.setImageDrawable(Profile.getPicture());
+
+        ImageButton roommatesButton = (ImageButton) findViewById(R.id.buttonRoommates);
+        roommatesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Activité de Maxime si colocation inexistante, vue globale de la colocation sinon
+            }
+        });
+
+        ImageButton accountingButton = (ImageButton) findViewById(R.id.buttonAccounting);
+        accountingButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Activité de Quentin
+            }
+        });
+
+        ImageButton shopButton = (ImageButton) findViewById(R.id.buttonShop);
+        shopButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Activité de Dylan
+            }
+        });
     }
 
     @Override
