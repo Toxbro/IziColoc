@@ -23,7 +23,11 @@ import com.uqac.frenchies.izicoloc.R;
 import com.uqac.frenchies.izicoloc.activities.accounting.AccountingActivity;
 import com.uqac.frenchies.izicoloc.activities.authentication.Login;
 import com.uqac.frenchies.izicoloc.activities.classes.Profile;
+<<<<<<< HEAD
+import com.uqac.frenchies.izicoloc.activities.roommates.GestionColocMain;
+=======
 import com.uqac.frenchies.izicoloc.activities.listecourses.MainCourses;
+>>>>>>> refs/remotes/origin/master
 
 public class MainMenu extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -53,7 +57,12 @@ public class MainMenu extends AppCompatActivity
         roommatesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                int idUser = 280;
+                Intent intent = new Intent(MainMenu.this, GestionColocMain.class);
+                intent.putExtra("idUser",idUser);
+                startActivity(intent);
                 //Activité de Maxime si colocation inexistante, vue globale de la colocation sinon
+
             }
         });
 

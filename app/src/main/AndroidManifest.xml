@@ -7,9 +7,17 @@
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.INTERNET" />
+<<<<<<< HEAD
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STROAGE"/>
     <uses-permission android:name="android.permission.WRITE_INTERNAL_STORAGE"/>
+=======
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_INTERNAL_STORAGE" />
+>>>>>>> refs/remotes/origin/master
 
     <application
         android:allowBackup="true"
@@ -62,8 +70,17 @@
             android:label="Accounting"
             android:theme="@style/AppTheme.NoActionBar"/>
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
+=======
+        <activity android:name=".activities.roommates.GestionColocAccueil"/>
+        <activity android:name=".activities.roommates.GestionColocAffiche"/>
+        <activity android:name=".activities.roommates.GestionColocDetection"/>
+        <activity android:name=".activities.roommates.GestionColocMain"/>
+        <activity android:name=".activities.roommates.GestionColocValidation"/>
+
+>>>>>>> refs/remotes/origin/master
         <!--<activity
             android:name=".activities.accounting."-->
         <activity

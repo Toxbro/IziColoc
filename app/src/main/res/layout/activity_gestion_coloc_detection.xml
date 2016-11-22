@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="QRCode Scanner"
+        android:textSize="25dp"
+        android:layout_gravity="center"
+        />
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="SCAN"
+        android:id="@+id/scanColoc"
+        />
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"/>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <EditText
+            android:layout_width="298dp"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:hint="Ou saisir le code de la colocation"
+            android:ems="10"
+            android:id="@+id/numColoc" />
+
+        <Button
+            android:text="Check"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/checkColoc"
+            android:layout_gravity="right"/>
+    </FrameLayout>
+
+
+
+</LinearLayout>
