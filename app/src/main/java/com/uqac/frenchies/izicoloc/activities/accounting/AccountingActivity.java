@@ -1,47 +1,119 @@
 package com.uqac.frenchies.izicoloc.activities.accounting;
 
+import android.content.Context;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
-import android.view.Menu;
+import android.util.Log;
 import android.view.MenuItem;
 
-public class AccountingActivity extends AppCompatActivity {
+import com.uqac.frenchies.izicoloc.R;
+import com.uqac.frenchies.izicoloc.activities.classes.Colocataire;
+import com.uqac.frenchies.izicoloc.activities.classes.Colocation;
+import com.uqac.frenchies.izicoloc.activities.classes.Expense;
+import com.uqac.frenchies.izicoloc.activities.classes.Profile;
+import com.uqac.frenchies.izicoloc.tools.Parser;
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
+public class AccountingActivity extends AppCompatActivity{
+
+    //This is our tablayout
+    private TabLayout tabLayout;
+
+    //This is our viewPager
+    private ViewPager viewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_accounting);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+//        String path =  getFilesDir().getPath()+"/data.xml";
 
-//                getString(R.string.cost)
-            }
-        });
+////////////////////////////////////////////////////////////////////
+        Colocataire thomas = new Colocataire();
+        thomas.setId(1849);
+        thomas.setFirstname("Thomas");
+        thomas.setLastname("Navarro");
+        thomas.setEmail("thomas.navarro@live.fr");
+        thomas.setPhone("0606060606");
+        DateFormat dtf = new SimpleDateFormat("dd/MM/yyyy", Locale.FRANCE);
+        try {
+            thomas.setBirthday(dtf.parse("26/03/1994"));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
-        Profile.setFirst_name("Quentin");
-        Profile.setLast_name("Rollin");
+        Colocataire quentin = new Colocataire();
+        quentin.setId(2016);
+        quentin.setFirstname("Quentin");
+        quentin.setLastname("Rollin");
+        quentin.setEmail("rollin.quentin@live.fr");
+        quentin.setPhone("0606060606");
+        try {
+            quentin.setBirthday(dtf.parse("05/04/1994"));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        Colocataire maxime = new Colocataire();
+        maxime.setId(1341);
+        maxime.setFirstname("Maxime");
+        maxime.setLastname("Roux");
+        maxime.setEmail("roux.maxime@live.fr");
+        maxime.setPhone("0606060606");
+        try {
+            maxime.setBirthday(dtf.parse("06/07/1994"));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+
+        Colocation.addColocataire(thomas);
+        Colocation.addColocataire(quentin);
+        Colocation.addColocataire(maxime);
+
+        Colocation.addExpense(quentin, new Expense(quentin, new Colocataire[]{quentin, maxime, thomas}, 100, "27/10/2016", "Courses"));
+        Colocation.addExpense(quentin, new Expense(quentin, new Colocataire[]{thomas}, 200, "05/11/2016", "Montréal"));
+        Colocation.addExpense(quentin, new Expense(quentin, new Colocataire[]{quentin, maxime}, 300, "12/11/2016", "Restaurant Montréal"));
+        Colocation.addExpense(quentin, new Expense(quentin, new Colocataire[]{maxime, thomas}, 400, "21/11/2016", "NYC"));
+        ////////////////////////////////////////////////////////////////////
+//
+//        coloc.parse(path);
+
+        //Initializing viewPager
+        viewPager = (ViewPager) findViewById(R.id.pager);
+
+        SectionsPagerAdapter adapter = new SectionsPagerAdapter(getSupportFragmentManager());
+
+        viewPager.setAdapter(adapter);
+
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabLayout);
+
+        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+        tabLayout.setupWithViewPager(viewPager);
     }
 
-    @Override
+    /*@Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_accounting, menu);
         return true;
-    }
+    }*/
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -63,7 +135,7 @@ public class AccountingActivity extends AppCompatActivity {
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
      * one of the sections/tabs/pages.
      */
-    public class SectionsPagerAdapter extends FragmentPagerAdapter {
+    public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
 
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
@@ -71,26 +143,35 @@ public class AccountingActivity extends AppCompatActivity {
 
         @Override
         public Fragment getItem(int position) {
-            // getItem is called to instantiate the fragment for the given page.
-            // Return a PlaceholderFragment (defined as a static inner class below).
-            return AccountingFragment.newInstance(position + 1);
+//            Bundle bundle = new Bundle();
+//            bundle.putString("path", getFilesDir().getPath()+"/data.xml");
+            switch(position){
+                case 0: {
+                    Fragment fragment = PersonalAccountingFragment.newInstance();
+//                    fragment.setArguments(bundle);
+                    return fragment;
+                }
+                case 1: {
+                    Fragment fragment = CommonAccountingFragment.newInstance();
+//                    fragment.setArguments(bundle);
+                    return fragment;
+                }
+            }
+            return null;
         }
 
         @Override
         public int getCount() {
-            // Show 3 total pages.
-            return 3;
+            return 2;
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return "SECTION 1";
+                    return "Personal";
                 case 1:
-                    return "SECTION 2";
-                case 2:
-                    return "SECTION 3";
+                    return "Common";
             }
             return null;
         }

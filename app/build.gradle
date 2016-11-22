@@ -10,6 +10,7 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        vectorDrawables.useSupportLibrary = true
     }
     buildTypes {
         release {
@@ -35,5 +36,8 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:24.2.0'
     compile 'com.google.android.gms:play-services-auth:9.8.0'
     testCompile 'junit:junit:4.12'
+    compile 'com.google.zxing:core:3.2.1'
+    compile 'com.journeyapps:zxing-android-embedded:3.2.0@aar'
+    compile 'com.mcxiaoke.volley:library:1.0.19'
 }
 apply plugin: 'com.google.gms.google-services'

@@ -62,7 +62,8 @@ public class Parser {
             Node parentNode = document.getElementsByTagName(parentNode_String).item(0);
 
             Element newElement = document.createElement(node_String);
-            newElement.appendChild(document.createTextNode(information));
+            if(!information.isEmpty())
+                newElement.appendChild(document.createTextNode(information));
             parentNode.appendChild(newElement);
 
             //Write the content into XML file
@@ -144,6 +145,8 @@ public class Parser {
             DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
             Document document = documentBuilder.parse(file);
+
+            NodeList nodeList = document.getElementsByTagName(node_String);
             Node node = document.getElementsByTagName(node_String).item(0);
             response = node.getFirstChild().getTextContent();
             return response;
@@ -152,4 +155,40 @@ public class Parser {
         }
         return null;
     }
+
+//    public static Object getObject(String pathToFile, Object o, String s){
+//        try {
+//
+//            File file = new File(pathToFile);
+//            if (!file.exists()) {
+//                generate(pathToFile);
+//                Log.i(TAG, "Creating new XML file : " + pathToFile);
+//                return null;
+//            }
+//            DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+//            DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
+//            Document document = documentBuilder.parse(file);
+//            if(o instanceof Expense){
+//                Expense e = (Expense) o;
+//                addNode(pathToFile, "root", "expense", "");
+//                e.getOwner().getId()
+//            }
+//            else if(o instanceof Colocation)
+//            NodeList nodeList = document.getElementsByTagName(node_String);
+//
+//            for (int i = 0; i < nodeList.getLength(); i++) {
+//                Element e = (Element) nodeList.item(i);
+//                NodeList children = e.getChildNodes();
+//                String detail = "";
+//                for (int j = 0; j < children.getLength(); j++) {
+//                    detail += children.item(j).getNodeName()+":"+children.item(j).getTextContent()+";";
+//                }
+//                response.add(detail);
+//            }
+//            return response;
+//        }catch (Exception e){
+//            Log.e(TAG, e.getMessage());
+//        }
+//        return null;
+//    }
 }

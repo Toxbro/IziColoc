@@ -20,8 +20,14 @@ import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.uqac.frenchies.izicoloc.R;
+import com.uqac.frenchies.izicoloc.activities.accounting.AccountingActivity;
 import com.uqac.frenchies.izicoloc.activities.authentication.Login;
 import com.uqac.frenchies.izicoloc.activities.classes.Profile;
+<<<<<<< HEAD
+import com.uqac.frenchies.izicoloc.activities.roommates.GestionColocMain;
+=======
+import com.uqac.frenchies.izicoloc.activities.listecourses.MainCourses;
+>>>>>>> refs/remotes/origin/master
 
 public class MainMenu extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -51,7 +57,12 @@ public class MainMenu extends AppCompatActivity
         roommatesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                int idUser = 280;
+                Intent intent = new Intent(MainMenu.this, GestionColocMain.class);
+                intent.putExtra("idUser",idUser);
+                startActivity(intent);
                 //Activité de Maxime si colocation inexistante, vue globale de la colocation sinon
+
             }
         });
 
@@ -59,7 +70,8 @@ public class MainMenu extends AppCompatActivity
         accountingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Activité de Quentin
+                Intent intent = new Intent(MainMenu.this, AccountingActivity.class);
+                MainMenu.this.startActivity(intent);
             }
         });
 
@@ -68,6 +80,8 @@ public class MainMenu extends AppCompatActivity
             @Override
             public void onClick(View v) {
                 //Activité de Dylan
+                Intent myIntent = new Intent("com.uqac.frenchies.izicoloc.activities.listecourses.MainCourses");
+                MainMenu.this.startActivity(myIntent);
             }
         });
     }
