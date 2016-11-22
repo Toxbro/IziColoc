@@ -37,7 +37,10 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.OptionalPendingResult;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
 import com.uqac.frenchies.izicoloc.R;
+import com.uqac.frenchies.izicoloc.activities.main.MainMenu;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -51,6 +54,8 @@ import java.util.concurrent.ExecutionException;
 public class Login extends AppCompatActivity {
 
     private final String TAG = "Login";
+
+    private static Login mInstance;
 
     private CallbackManager callbackManager;
 
@@ -66,7 +71,7 @@ public class Login extends AppCompatActivity {
 
     private String facebookBirthday;
 
-    private GoogleApiClient mGoogleApiClient;
+    public GoogleApiClient mGoogleApiClient;
 
     private GoogleSignInAccount googleSignInAccount;
 
@@ -82,7 +87,7 @@ public class Login extends AppCompatActivity {
         FacebookSdk.sdkInitialize(getApplicationContext());
         AppEventsLogger.activateApp(this, getString(R.string.facebook_app_id));
         callbackManager = CallbackManager.Factory.create();
-
+        mInstance = this;
 
 
         //*****************************************************************************//
@@ -143,7 +148,7 @@ public class Login extends AppCompatActivity {
 
         // Build a GoogleApiClient with access to the Google Sign-In API and the
         // options specified by gso.
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
+        mGoogleApiClient = new GoogleApiClient.Builder(getApplicationContext())
                 .enableAutoManage(this /* FragmentActivity */, new GoogleApiClient.OnConnectionFailedListener() {
                     @Override
                     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
@@ -190,6 +195,11 @@ public class Login extends AppCompatActivity {
             loginSuccess();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
     private void getFacebookAdditionalInformation(AccessToken accessToken){
         GraphRequest request = GraphRequest.newMeRequest(
                 accessToken,
@@ -224,8 +234,6 @@ public class Login extends AppCompatActivity {
             String fullName = googleSignInAccount.getDisplayName();
             com.uqac.frenchies.izicoloc.activities.classes.Profile.setFirstname(fullName.split(" ")[0]);
             com.uqac.frenchies.izicoloc.activities.classes.Profile.setLastname(fullName.split(" ")[1]);
-            Log.d(TAG, "Email :" + googleSignInAccount.getEmail());
-
             com.uqac.frenchies.izicoloc.activities.classes.Profile.setEmail(googleSignInAccount.getEmail());
             if (googleSignInAccount.getPhotoUrl() != null)
                 com.uqac.frenchies.izicoloc.activities.classes.Profile.setPicture(new BitmapDrawable(getResources(), getGoogleProfilePicture(googleSignInAccount.getPhotoUrl().toString())));
@@ -234,6 +242,7 @@ public class Login extends AppCompatActivity {
             com.uqac.frenchies.izicoloc.activities.classes.Profile.setIsLoggedWith("google");
 
             com.uqac.frenchies.izicoloc.activities.classes.Profile.setmGoogleApiClient(mGoogleApiClient);
+            Log.d(TAG, "API (from isConnected()) :" + com.uqac.frenchies.izicoloc.activities.classes.Profile.getmGoogleApiClient().isConnected());
             return true;
         }
         else if (isConnectedWithFacebook){
@@ -323,5 +332,54 @@ public class Login extends AppCompatActivity {
     public void onDestroy() {
         super.onDestroy();
         profileTracker.stopTracking();
+    }
+
+    public void setClient(GoogleApiClient client){
+        mGoogleApiClient = client;
+    }
+
+    public GoogleApiClient getClient(){
+        return mGoogleApiClient;
+    }
+
+    public void setIsConnectedWithGoogle(Boolean isConnectedWithGoogle){
+        this.isConnectedWithGoogle = isConnectedWithGoogle;
+    }
+
+    public void setIsConnectedWithFacebook(Boolean isConnectedWithFacebook){
+        this.isConnectedWithFacebook = isConnectedWithFacebook;
+    }
+
+    public void logout(){
+        if (com.uqac.frenchies.izicoloc.activities.classes.Profile.getIsLoggedWith().equals("google")) {
+            Log.d(TAG, "API is connected from logout() : "+mGoogleApiClient.isConnected());
+            if (mGoogleApiClient.isConnected()) {
+                Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
+                        new ResultCallback<Status>() {
+                            @Override
+                            public void onResult(Status status) {
+                                Auth.GoogleSignInApi.revokeAccess(mGoogleApiClient).setResultCallback(
+                                        new ResultCallback<Status>() {
+                                            @Override
+                                            public void onResult(Status status) {
+                                                setIsConnectedWithGoogle(false);
+                                            }
+                                        });
+                            }
+                        });
+            }else{
+                setIsConnectedWithGoogle(false);
+            }
+        }
+        else if (com.uqac.frenchies.izicoloc.activities.classes.Profile.getIsLoggedWith().equals("facebook")){
+            setIsConnectedWithFacebook(false);
+            LoginManager.getInstance().logOut();
+        }
+
+    }
+
+
+    public static Login getmInstance(){
+        return mInstance;
     }
 }

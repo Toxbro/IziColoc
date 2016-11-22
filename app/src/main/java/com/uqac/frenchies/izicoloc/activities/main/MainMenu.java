@@ -2,6 +2,7 @@ package com.uqac.frenchies.izicoloc.activities.main;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -17,17 +18,16 @@ import android.widget.TextView;
 
 import com.facebook.login.LoginManager;
 import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInApi;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.uqac.frenchies.izicoloc.R;
 import com.uqac.frenchies.izicoloc.activities.accounting.AccountingActivity;
 import com.uqac.frenchies.izicoloc.activities.authentication.Login;
 import com.uqac.frenchies.izicoloc.activities.classes.Profile;
-<<<<<<< HEAD
 import com.uqac.frenchies.izicoloc.activities.roommates.GestionColocMain;
-=======
 import com.uqac.frenchies.izicoloc.activities.listecourses.MainCourses;
->>>>>>> refs/remotes/origin/master
 
 public class MainMenu extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -36,6 +36,7 @@ public class MainMenu extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -80,7 +81,7 @@ public class MainMenu extends AppCompatActivity
             @Override
             public void onClick(View v) {
                 //Activité de Dylan
-                Intent myIntent = new Intent("com.uqac.frenchies.izicoloc.activities.listecourses.MainCourses");
+                Intent myIntent = new Intent(MainMenu.this, MainCourses.class);
                 MainMenu.this.startActivity(myIntent);
             }
         });
@@ -144,22 +145,9 @@ public class MainMenu extends AppCompatActivity
         return true;
     }
 
-    private void logout(){
-        if (Profile.getIsLoggedWith().equals("google")) {
-            Auth.GoogleSignInApi.signOut(Profile.getmGoogleApiClient()).setResultCallback(
-                    new ResultCallback<Status>() {
-                        @Override
-                        public void onResult(Status status) {
-                            Intent intent = new Intent(MainMenu.this, Login.class);
-                            startActivity(intent);
-                        }
-                    });
-        }
-        else{
-            LoginManager.getInstance().logOut();
-            Intent intent = new Intent(MainMenu.this, Login.class);
-            startActivity(intent);
-        }
-
+    private void logout() {
+        Login.getmInstance().logout();
+        Intent intent = new Intent(MainMenu.this, Login.class);
+        startActivity(intent);
     }
 }
