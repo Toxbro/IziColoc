@@ -28,7 +28,6 @@
         android:layout_height="wrap_content"
         android:id="@+id/expenses"
         android:fontFamily="sans-serif"
-        android:textSize="30sp"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
@@ -45,6 +44,6 @@
         android:layout_alignRight="@+id/fab"
         android:layout_alignEnd="@+id/fab"
         android:layout_height="match_parent"
-        android:id="@+id/sharedExpensesList" />
+        android:id="@+id/sharedExpensesList"/>
 
 </RelativeLayout>

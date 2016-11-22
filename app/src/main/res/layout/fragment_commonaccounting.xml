@@ -14,5 +14,6 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:id="@+id/expensesList" />
+        android:id="@+id/expensesList"
+        tools:listitem="@layout/expenseitem"/>
 </RelativeLayout>

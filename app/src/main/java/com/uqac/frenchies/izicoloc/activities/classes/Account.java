@@ -1,6 +1,7 @@
-package com.uqac.frenchies.izicoloc.activities.accounting;
+package com.uqac.frenchies.izicoloc.activities.classes;
 
 import com.uqac.frenchies.izicoloc.activities.classes.Colocataire;
+import com.uqac.frenchies.izicoloc.activities.classes.Expense;
 
 import java.util.HashMap;
 
@@ -25,5 +26,9 @@ public class Account {
         if(result)
             balance += ex.getAmount();
         return result;
+    }
+
+    public int getBalance() {
+        return balance;
     }
 }

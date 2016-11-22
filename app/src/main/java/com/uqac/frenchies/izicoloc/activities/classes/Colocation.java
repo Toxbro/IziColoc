@@ -8,7 +8,9 @@ import java.util.ArrayList;
 
 public class Colocation {
 
-    private static ArrayList<Colocataire> colocataires;
+    private static ArrayList<Colocataire> colocataires = new ArrayList<>();
+
+    private static ArrayList<Expense> expenses = new ArrayList<>();
 
 
     public Colocation(){}
@@ -17,12 +19,12 @@ public class Colocation {
         colocataires.add(c);
     }
 
-    public static void addColocataires(String s){
-        String[] splitted = s.split("/");
-        for(String temp : splitted){
-            addColocataire(new Colocataire(temp));
-        }
-    }
+//    public static void addColocataires(String s){
+//        String[] splitted = s.split("/");
+//        for(String temp : splitted){
+//            addColocataire(new Colocataire(temp));
+//        }
+//    }
 
     public static ArrayList<Colocataire> getColocataires(){
         return colocataires;
@@ -36,12 +38,26 @@ public class Colocation {
         return null;
     }
 
-    public static String convertToString(){
-        String result = "";
-        for(Colocataire c : colocataires){
-            result+=c.toString()+"/";
-        }
-        result = result.substring(0, result.length()-1);
+//    public static void parse(String pathToFile){
+//        Parser.addNode(pathToFile, "root", "Colocation", "");
+//        for(Colocataire c : colocataires){
+//            c.parse(pathToFile);
+//        }
+//    }
+
+    public static void addExpense(Expense e) {
+        expenses.add(e);
+    }
+
+    public static ArrayList<Expense> getExpenses(){
+        return expenses;
+    }
+
+    public static ArrayList<Expense> getExpensesOf(Colocataire c){
+        ArrayList<Expense> result = new ArrayList<>();
+        for(Expense e : expenses)
+            if(e.getOwner().getId() == c.getId())
+                result.add(e);
         return result;
     }
 }
