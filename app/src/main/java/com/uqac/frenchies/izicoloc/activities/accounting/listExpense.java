@@ -9,7 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.uqac.frenchies.izicoloc.R;
-import com.uqac.frenchies.izicoloc.activities.classes.Expense;
+import com.uqac.frenchies.izicoloc.tools.classes.Expense;
 
 import java.util.List;
 

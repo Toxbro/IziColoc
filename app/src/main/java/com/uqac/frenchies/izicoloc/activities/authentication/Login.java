@@ -40,7 +40,6 @@ import com.google.android.gms.common.api.OptionalPendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.uqac.frenchies.izicoloc.R;
-import com.uqac.frenchies.izicoloc.activities.main.MainMenu;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -211,9 +210,9 @@ public class Login extends AppCompatActivity {
                             // Application code
                             facebookEmail = object.getString("email");
                             facebookBirthday = object.getString("birthday"); // 01/31/1980 format
-                            com.uqac.frenchies.izicoloc.activities.classes.Profile.setEmail(facebookEmail);
+                            com.uqac.frenchies.izicoloc.tools.classes.Profile.setEmail(facebookEmail);
                             try {
-                                com.uqac.frenchies.izicoloc.activities.classes.Profile.setBirthday(DateFormat.getDateInstance(DateFormat.SHORT, Locale.FRANCE).parse(facebookBirthday));
+                                com.uqac.frenchies.izicoloc.tools.classes.Profile.setBirthday(DateFormat.getDateInstance(DateFormat.SHORT, Locale.FRANCE).parse(facebookBirthday));
                             } catch (ParseException e) {
                                 e.printStackTrace();
                             }
@@ -232,17 +231,17 @@ public class Login extends AppCompatActivity {
     private boolean isConnected(){
         if (isConnectedWithGoogle) {
             String fullName = googleSignInAccount.getDisplayName();
-            com.uqac.frenchies.izicoloc.activities.classes.Profile.setFirstname(fullName.split(" ")[0]);
-            com.uqac.frenchies.izicoloc.activities.classes.Profile.setLastname(fullName.split(" ")[1]);
-            com.uqac.frenchies.izicoloc.activities.classes.Profile.setEmail(googleSignInAccount.getEmail());
+            com.uqac.frenchies.izicoloc.tools.classes.Profile.setFirstname(fullName.split(" ")[0]);
+            com.uqac.frenchies.izicoloc.tools.classes.Profile.setLastname(fullName.split(" ")[1]);
+            com.uqac.frenchies.izicoloc.tools.classes.Profile.setEmail(googleSignInAccount.getEmail());
             if (googleSignInAccount.getPhotoUrl() != null)
-                com.uqac.frenchies.izicoloc.activities.classes.Profile.setPicture(new BitmapDrawable(getResources(), getGoogleProfilePicture(googleSignInAccount.getPhotoUrl().toString())));
+                com.uqac.frenchies.izicoloc.tools.classes.Profile.setPicture(new BitmapDrawable(getResources(), getGoogleProfilePicture(googleSignInAccount.getPhotoUrl().toString())));
             else
-                com.uqac.frenchies.izicoloc.activities.classes.Profile.setPicture(getResources().getDrawable(R.mipmap.ic_defaultgoogle));
-            com.uqac.frenchies.izicoloc.activities.classes.Profile.setIsLoggedWith("google");
+                com.uqac.frenchies.izicoloc.tools.classes.Profile.setPicture(getResources().getDrawable(R.mipmap.ic_defaultgoogle));
+            com.uqac.frenchies.izicoloc.tools.classes.Profile.setIsLoggedWith("google");
 
-            com.uqac.frenchies.izicoloc.activities.classes.Profile.setmGoogleApiClient(mGoogleApiClient);
-            Log.d(TAG, "API (from isConnected()) :" + com.uqac.frenchies.izicoloc.activities.classes.Profile.getmGoogleApiClient().isConnected());
+            com.uqac.frenchies.izicoloc.tools.classes.Profile.setmGoogleApiClient(mGoogleApiClient);
+            Log.d(TAG, "API (from isConnected()) :" + com.uqac.frenchies.izicoloc.tools.classes.Profile.getmGoogleApiClient().isConnected());
             return true;
         }
         else if (isConnectedWithFacebook){
@@ -252,17 +251,17 @@ public class Login extends AppCompatActivity {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            com.uqac.frenchies.izicoloc.activities.classes.Profile.setFirstname(Profile.getCurrentProfile().getFirstName());
-            com.uqac.frenchies.izicoloc.activities.classes.Profile.setLastname(Profile.getCurrentProfile().getLastName());
-            com.uqac.frenchies.izicoloc.activities.classes.Profile.setEmail(facebookEmail);
-            com.uqac.frenchies.izicoloc.activities.classes.Profile.setPicture(new BitmapDrawable(getResources(), getFacebookProfilePicture(Profile.getCurrentProfile().getId())));
+            com.uqac.frenchies.izicoloc.tools.classes.Profile.setFirstname(Profile.getCurrentProfile().getFirstName());
+            com.uqac.frenchies.izicoloc.tools.classes.Profile.setLastname(Profile.getCurrentProfile().getLastName());
+            com.uqac.frenchies.izicoloc.tools.classes.Profile.setEmail(facebookEmail);
+            com.uqac.frenchies.izicoloc.tools.classes.Profile.setPicture(new BitmapDrawable(getResources(), getFacebookProfilePicture(Profile.getCurrentProfile().getId())));
             try {
                 if (facebookBirthday != null)
-                    com.uqac.frenchies.izicoloc.activities.classes.Profile.setBirthday(DateFormat.getDateInstance(DateFormat.SHORT, Locale.FRANCE).parse(facebookBirthday));
+                    com.uqac.frenchies.izicoloc.tools.classes.Profile.setBirthday(DateFormat.getDateInstance(DateFormat.SHORT, Locale.FRANCE).parse(facebookBirthday));
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            com.uqac.frenchies.izicoloc.activities.classes.Profile.setIsLoggedWith("facebook");
+            com.uqac.frenchies.izicoloc.tools.classes.Profile.setIsLoggedWith("facebook");
             return true;
         }
         else {
@@ -351,7 +350,7 @@ public class Login extends AppCompatActivity {
     }
 
     public void logout(){
-        if (com.uqac.frenchies.izicoloc.activities.classes.Profile.getIsLoggedWith().equals("google")) {
+        if (com.uqac.frenchies.izicoloc.tools.classes.Profile.getIsLoggedWith().equals("google")) {
             Log.d(TAG, "API is connected from logout() : "+mGoogleApiClient.isConnected());
             if (mGoogleApiClient.isConnected()) {
                 Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
@@ -371,7 +370,7 @@ public class Login extends AppCompatActivity {
                 setIsConnectedWithGoogle(false);
             }
         }
-        else if (com.uqac.frenchies.izicoloc.activities.classes.Profile.getIsLoggedWith().equals("facebook")){
+        else if (com.uqac.frenchies.izicoloc.tools.classes.Profile.getIsLoggedWith().equals("facebook")){
             setIsConnectedWithFacebook(false);
             LoginManager.getInstance().logOut();
         }

@@ -2,7 +2,6 @@ package com.uqac.frenchies.izicoloc.activities.main;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -16,16 +15,10 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.facebook.login.LoginManager;
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.auth.api.signin.GoogleSignInApi;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
 import com.uqac.frenchies.izicoloc.R;
 import com.uqac.frenchies.izicoloc.activities.accounting.AccountingActivity;
 import com.uqac.frenchies.izicoloc.activities.authentication.Login;
-import com.uqac.frenchies.izicoloc.activities.classes.Profile;
+import com.uqac.frenchies.izicoloc.tools.classes.Profile;
 import com.uqac.frenchies.izicoloc.activities.roommates.GestionColocMain;
 import com.uqac.frenchies.izicoloc.activities.listecourses.MainCourses;
 
