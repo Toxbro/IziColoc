@@ -23,6 +23,7 @@ import com.uqac.frenchies.izicoloc.R;
 import com.uqac.frenchies.izicoloc.activities.accounting.AccountingActivity;
 import com.uqac.frenchies.izicoloc.activities.authentication.Login;
 import com.uqac.frenchies.izicoloc.activities.classes.Profile;
+import com.uqac.frenchies.izicoloc.activities.listecourses.MainCourses;
 
 public class MainMenu extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -70,6 +71,8 @@ public class MainMenu extends AppCompatActivity
             @Override
             public void onClick(View v) {
                 //Activité de Dylan
+                Intent myIntent = new Intent("com.uqac.frenchies.izicoloc.activities.listecourses.MainCourses");
+                MainMenu.this.startActivity(myIntent);
             }
         });
     }
