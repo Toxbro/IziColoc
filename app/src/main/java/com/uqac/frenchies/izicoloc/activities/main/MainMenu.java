@@ -22,7 +22,11 @@ import com.google.android.gms.common.api.Status;
 import com.uqac.frenchies.izicoloc.R;
 import com.uqac.frenchies.izicoloc.activities.authentication.Login;
 import com.uqac.frenchies.izicoloc.activities.classes.Profile;
+<<<<<<< HEAD
 import com.uqac.frenchies.izicoloc.activities.roommates.GestionColocMain;
+=======
+import com.uqac.frenchies.izicoloc.activities.listecourses.MainCourses;
+>>>>>>> refs/remotes/origin/master
 
 public class MainMenu extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -74,6 +78,8 @@ public class MainMenu extends AppCompatActivity
             @Override
             public void onClick(View v) {
                 //Activité de Dylan
+                Intent myIntent = new Intent("com.uqac.frenchies.izicoloc.activities.listecourses.MainCourses");
+                MainMenu.this.startActivity(myIntent);
             }
         });
     }
