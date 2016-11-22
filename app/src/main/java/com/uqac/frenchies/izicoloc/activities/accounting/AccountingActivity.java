@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import com.uqac.frenchies.izicoloc.R;
 import com.uqac.frenchies.izicoloc.activities.classes.Colocataire;
 import com.uqac.frenchies.izicoloc.activities.classes.Colocation;
+import com.uqac.frenchies.izicoloc.activities.classes.Expense;
 import com.uqac.frenchies.izicoloc.activities.classes.Profile;
 import com.uqac.frenchies.izicoloc.tools.Parser;
 
@@ -47,34 +48,54 @@ public class AccountingActivity extends AppCompatActivity{
 
 //        String path =  getFilesDir().getPath()+"/data.xml";
 
-//        Colocataire thomas = new Colocataire();
-//        thomas.setId(1849);
-//        thomas.setFirstname("Thomas");
-//        thomas.setLastname("Navarro");
-//        thomas.setEmail("thomas.navarro@live.fr");
-//        thomas.setPhone("0606060606");
-//        DateFormat dtf = new SimpleDateFormat("dd/MM/yyyy", Locale.FRANCE);
-//        try {
-//            thomas.setBirthday(dtf.parse("26/03/1994"));
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//        }
-//
-//        Colocataire quentin = new Colocataire();
-//        quentin.setId(2016);
-//        quentin.setFirstname("Quentin");
-//        quentin.setLastname("Rollin");
-//        quentin.setEmail("rollin.quentin@live.fr");
-//        quentin.setPhone("0606060606");
-//        try {
-//            quentin.setBirthday(dtf.parse("05/04/1994"));
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//        }
-//
-//        Colocation coloc = new Colocation();
-//        coloc.addColocataire(thomas);
-//        coloc.addColocataire(quentin);
+////////////////////////////////////////////////////////////////////
+        Colocataire thomas = new Colocataire();
+        thomas.setId(1849);
+        thomas.setFirstname("Thomas");
+        thomas.setLastname("Navarro");
+        thomas.setEmail("thomas.navarro@live.fr");
+        thomas.setPhone("0606060606");
+        DateFormat dtf = new SimpleDateFormat("dd/MM/yyyy", Locale.FRANCE);
+        try {
+            thomas.setBirthday(dtf.parse("26/03/1994"));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        Colocataire quentin = new Colocataire();
+        quentin.setId(2016);
+        quentin.setFirstname("Quentin");
+        quentin.setLastname("Rollin");
+        quentin.setEmail("rollin.quentin@live.fr");
+        quentin.setPhone("0606060606");
+        try {
+            quentin.setBirthday(dtf.parse("05/04/1994"));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        Colocataire maxime = new Colocataire();
+        maxime.setId(1341);
+        maxime.setFirstname("Maxime");
+        maxime.setLastname("Roux");
+        maxime.setEmail("roux.maxime@live.fr");
+        maxime.setPhone("0606060606");
+        try {
+            maxime.setBirthday(dtf.parse("06/07/1994"));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+
+        Colocation.addColocataire(thomas);
+        Colocation.addColocataire(quentin);
+        Colocation.addColocataire(maxime);
+
+        Colocation.addExpense(quentin, new Expense(quentin, new Colocataire[]{quentin, maxime, thomas}, 100, "27/10/2016", "Courses"));
+        Colocation.addExpense(quentin, new Expense(quentin, new Colocataire[]{thomas}, 200, "05/11/2016", "Montréal"));
+        Colocation.addExpense(quentin, new Expense(quentin, new Colocataire[]{quentin, maxime}, 300, "12/11/2016", "Restaurant Montréal"));
+        Colocation.addExpense(quentin, new Expense(quentin, new Colocataire[]{maxime, thomas}, 400, "21/11/2016", "NYC"));
+        ////////////////////////////////////////////////////////////////////
 //
 //        coloc.parse(path);
 

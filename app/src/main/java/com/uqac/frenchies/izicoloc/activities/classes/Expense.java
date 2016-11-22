@@ -2,10 +2,6 @@ package com.uqac.frenchies.izicoloc.activities.classes;
 
 import android.util.Log;
 
-import com.uqac.frenchies.izicoloc.activities.classes.Colocataire;
-import com.uqac.frenchies.izicoloc.activities.classes.Colocation;
-import com.uqac.frenchies.izicoloc.activities.classes.Profile;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -21,10 +17,12 @@ public class Expense {
     private String label;
     private String date;
 
-    public Expense(Colocataire owner, Colocataire[] shares, int amount){
+    public Expense(Colocataire owner, Colocataire[] shares, int amount, String date, String label){
         this.owner = owner;
         this.shares = new ArrayList<>(Arrays.asList(shares));
         this.amount = amount;
+        this.date = date;
+        this.label = label;
     }
 
 //    public Expense(String s){
@@ -55,7 +53,7 @@ public class Expense {
 
     public Colocataire[] getShares() {
         if(shares.contains(owner)) {
-            ArrayList<Colocataire> temp = shares;
+            ArrayList<Colocataire> temp = new ArrayList<>(shares);
             temp.remove(owner);
             return temp.toArray(new Colocataire[temp.size()]);
         }
@@ -67,6 +65,14 @@ public class Expense {
 
     public int getSharedAmount(){
         return amount/(shares.size());
+    }
+
+    public String getLabel() {
+        return label;
+    }
+
+    public String getDate() {
+        return date;
     }
 
 //    public String toString(){

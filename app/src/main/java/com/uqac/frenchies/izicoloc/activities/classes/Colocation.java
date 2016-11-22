@@ -1,6 +1,10 @@
 package com.uqac.frenchies.izicoloc.activities.classes;
 
+import android.util.Log;
+
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 
 /**
  * Created by quentin on 16-11-19.
@@ -10,13 +14,15 @@ public class Colocation {
 
     private static ArrayList<Colocataire> colocataires = new ArrayList<>();
 
-    private static ArrayList<Expense> expenses = new ArrayList<>();
+    private static HashMap<Colocataire, Account> accounts = new HashMap<>();
 
+    private static ArrayList<Expense> expenses = new ArrayList<>();
 
     public Colocation(){}
 
     public static void addColocataire(Colocataire c){
         colocataires.add(c);
+        accounts.put(c, new Account(c));
     }
 
 //    public static void addColocataires(String s){
@@ -38,6 +44,14 @@ public class Colocation {
         return null;
     }
 
+    public static Colocataire getColocataire(String nom) {
+        for(Colocataire c : colocataires){
+            if(c.getFirstname().equals(nom))
+                return c;
+        }
+        return null;
+    }
+
 //    public static void parse(String pathToFile){
 //        Parser.addNode(pathToFile, "root", "Colocation", "");
 //        for(Colocataire c : colocataires){
@@ -45,19 +59,20 @@ public class Colocation {
 //        }
 //    }
 
-    public static void addExpense(Expense e) {
+    public static int getBalance(Colocataire c){
+        return accounts.get(c).getBalance();
+    }
+
+    public static int getShare(Colocataire c, Colocataire d){
+        return accounts.get(c).getShare(d);
+    }
+
+    public static void addExpense(Colocataire c, Expense e){
         expenses.add(e);
+        accounts.get(c).addExpense(e);
     }
 
-    public static ArrayList<Expense> getExpenses(){
-        return expenses;
-    }
-
-    public static ArrayList<Expense> getExpensesOf(Colocataire c){
-        ArrayList<Expense> result = new ArrayList<>();
-        for(Expense e : expenses)
-            if(e.getOwner().getId() == c.getId())
-                result.add(e);
-        return result;
-    }
+    public static ArrayList<Expense> getExpenses() {
+        Log.d("expenses", Arrays.toString(expenses.toArray()));
+        return expenses; }
 }

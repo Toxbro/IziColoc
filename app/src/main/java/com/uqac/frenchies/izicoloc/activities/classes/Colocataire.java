@@ -98,4 +98,8 @@ public class Colocataire {
 //        DateFormat dtf = new SimpleDateFormat("dd/MM/yyyy", Locale.FRANCE);
 //        Parser.addNode(pathToFile, "Colocataire", "Birthday", dtf.format(getBirthday()));
 //    }
+
+    public String toString(){
+        return this.getFirstname();
+    }
 }

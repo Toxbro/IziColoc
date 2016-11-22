@@ -1,8 +1,9 @@
 package com.uqac.frenchies.izicoloc.activities.classes;
 
-import com.uqac.frenchies.izicoloc.activities.classes.Colocataire;
-import com.uqac.frenchies.izicoloc.activities.classes.Expense;
+import android.util.Log;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 /**
@@ -13,22 +14,34 @@ public class Account {
 
     private Colocataire owner;
     private int balance;
-    private HashMap<Colocataire, Integer> shares;
+    private HashMap<Colocataire, Integer> shares = new HashMap<>();
+
+    public Account(Colocataire c){
+        this.owner = c;
+        balance = 0;
+    }
 
     public boolean addExpense(Expense ex){
         boolean result = true;
-        for(Colocataire c : ex.getShares()){
-            if(shares.containsKey(c) && result)
-                shares.put(c,shares.get(c)+ex.getAmount());
-            else
-                result = false;
+        Colocataire[] coloc = ex.getShares();
+
+        for(Colocataire c : coloc){
+            if(!shares.containsKey(c))
+                shares.put(c, 0);
+            shares.put(c,shares.get(c)+ex.getSharedAmount());
         }
-        if(result)
-            balance += ex.getAmount();
+        balance += ex.getAmount();
         return result;
     }
 
     public int getBalance() {
         return balance;
+    }
+
+    public int getShare(Colocataire c){
+        if(shares.containsKey(c))
+            return shares.get(c);
+        else
+            return 0;
     }
 }
