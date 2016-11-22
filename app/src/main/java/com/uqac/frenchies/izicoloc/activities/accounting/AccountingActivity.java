@@ -37,10 +37,6 @@ public class AccountingActivity extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        Profile.setFirstname("Quentin");
-        Profile.setLastname("Rollin");
-        Profile.setId(2016);
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_accounting);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
