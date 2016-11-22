@@ -1,14 +1,8 @@
-package com.uqac.frenchies.izicoloc.activities.classes;
+package com.uqac.frenchies.izicoloc.tools.classes;
 
 import android.graphics.drawable.Drawable;
 
-import com.uqac.frenchies.izicoloc.tools.Parser;
-
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
 
 /**
  * Created by Thomas on 2016-11-15.

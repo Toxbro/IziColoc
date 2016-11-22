@@ -1,4 +1,4 @@
-package com.uqac.frenchies.izicoloc.activities.classes;
+package com.uqac.frenchies.izicoloc.tools.classes;
 
 import android.util.Log;
 
@@ -75,4 +75,10 @@ public class Colocation {
     public static ArrayList<Expense> getExpenses() {
         Log.d("expenses", Arrays.toString(expenses.toArray()));
         return expenses; }
+
+    public static void resetExpenses(){
+        expenses = new ArrayList<>();
+        accounts = new HashMap<>();
+        colocataires = new ArrayList<>();
+    }
 }

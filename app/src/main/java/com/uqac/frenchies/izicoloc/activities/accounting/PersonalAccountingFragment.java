@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,19 +12,11 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.uqac.frenchies.izicoloc.R;
-import com.uqac.frenchies.izicoloc.activities.classes.Colocataire;
-import com.uqac.frenchies.izicoloc.activities.classes.Colocation;
-import com.uqac.frenchies.izicoloc.activities.classes.Expense;
-import com.uqac.frenchies.izicoloc.activities.classes.Profile;
+import com.uqac.frenchies.izicoloc.tools.classes.Colocataire;
+import com.uqac.frenchies.izicoloc.tools.classes.Colocation;
 
-import java.lang.reflect.Array;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 
 public class PersonalAccountingFragment extends Fragment {
@@ -80,7 +71,7 @@ public class PersonalAccountingFragment extends Fragment {
         for(Colocataire c : Colocation.getColocataires()){
             shares.put(c.getFirstname(), Colocation.getShare(quentin, c));
         }
-        shares.remove(quentin);
+        shares.remove(quentin.getFirstname());
 
         ArrayList<String> result = new ArrayList<>();
         for(Map.Entry<String, Integer> entry : shares.entrySet()){

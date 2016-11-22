@@ -7,21 +7,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.uqac.frenchies.izicoloc.R;
-import com.uqac.frenchies.izicoloc.activities.classes.Colocataire;
-import com.uqac.frenchies.izicoloc.activities.classes.Colocation;
-import com.uqac.frenchies.izicoloc.activities.classes.Expense;
-import com.uqac.frenchies.izicoloc.activities.classes.Profile;
-
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
+import com.uqac.frenchies.izicoloc.tools.classes.Colocation;
+import com.uqac.frenchies.izicoloc.tools.classes.Expense;
 
 /**
  * Created by quentin on 16-11-20.

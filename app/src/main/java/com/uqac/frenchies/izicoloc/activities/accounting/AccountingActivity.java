@@ -1,6 +1,5 @@
 package com.uqac.frenchies.izicoloc.activities.accounting;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -10,20 +9,16 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 
 import com.uqac.frenchies.izicoloc.R;
-import com.uqac.frenchies.izicoloc.activities.classes.Colocataire;
-import com.uqac.frenchies.izicoloc.activities.classes.Colocation;
-import com.uqac.frenchies.izicoloc.activities.classes.Expense;
-import com.uqac.frenchies.izicoloc.activities.classes.Profile;
-import com.uqac.frenchies.izicoloc.tools.Parser;
+import com.uqac.frenchies.izicoloc.tools.classes.Colocataire;
+import com.uqac.frenchies.izicoloc.tools.classes.Colocation;
+import com.uqac.frenchies.izicoloc.tools.classes.Expense;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Locale;
 
 public class AccountingActivity extends AppCompatActivity{
@@ -41,6 +36,8 @@ public class AccountingActivity extends AppCompatActivity{
         setContentView(R.layout.activity_accounting);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        Colocation.resetExpenses();
 
 //        String path =  getFilesDir().getPath()+"/data.xml";
 

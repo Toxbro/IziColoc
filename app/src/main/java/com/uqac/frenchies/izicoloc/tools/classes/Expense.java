@@ -1,6 +1,4 @@
-package com.uqac.frenchies.izicoloc.activities.classes;
-
-import android.util.Log;
+package com.uqac.frenchies.izicoloc.tools.classes;
 
 import java.util.ArrayList;
 import java.util.Arrays;

@@ -1,4 +1,4 @@
-package com.uqac.frenchies.izicoloc.activities.classes;
+package com.uqac.frenchies.izicoloc.tools.classes;
 
 import android.graphics.drawable.Drawable;
 

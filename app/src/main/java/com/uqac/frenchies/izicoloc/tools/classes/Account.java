@@ -1,9 +1,5 @@
-package com.uqac.frenchies.izicoloc.activities.classes;
+package com.uqac.frenchies.izicoloc.tools.classes;
 
-import android.util.Log;
-
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 
 /**

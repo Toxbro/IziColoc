@@ -52,8 +52,6 @@
             android:name=".activities.listecourses.MainCourses"
             android:label="Courses">
         </activity>
-        <!--<activity
-            android:name=".activities.accounting."-->
     </application>
 
 </manifest>
