@@ -6,7 +6,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,7 +21,7 @@ import com.uqac.frenchies.izicoloc.R;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainCourses extends AppCompatActivity {
 
     ListView listeCourses;
     List<Course> courses;
@@ -41,8 +40,6 @@ public class MainActivity extends AppCompatActivity {
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_courses);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
         //Bouton d'ajout 1
         FloatingActionButton boutonAjout = (FloatingActionButton) findViewById(R.id.ajout);
@@ -72,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
                 download();
             }
         });
-        boiteDialogueSuppression = new AlertDialog.Builder(MainActivity.this);
+        boiteDialogueSuppression = new AlertDialog.Builder(MainCourses.this);
         boiteDialogueSuppression.setTitle("Supprimer la liste de courses");
 
         listeCourses = (ListView) findViewById(R.id.listView); //Récupération de la listView
@@ -101,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void initialiserListe()
     {
-        listAdapter = new CoursesAdapter(MainActivity.this, courses);
+        listAdapter = new CoursesAdapter(MainCourses.this, courses);
         listeCourses.setAdapter(listAdapter);
         listeCourses.setTextFilterEnabled(true);
 
@@ -111,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void initialiserGrid()
     {
-        gridAdapter = new CoursesAdapter(MainActivity.this, suggestions);
+        gridAdapter = new CoursesAdapter(MainCourses.this, suggestions);
         listeSuggestions.setAdapter(gridAdapter);
         listeSuggestions.setTextFilterEnabled(true);
 
@@ -121,8 +118,8 @@ public class MainActivity extends AppCompatActivity {
     //Demande du produit
     private void afficherDialogues()
     {
-        final EditText input = new EditText(MainActivity.this);
-        new AlertDialog.Builder(MainActivity.this)
+        final EditText input = new EditText(MainCourses.this);
+        new AlertDialog.Builder(MainCourses.this)
                 .setTitle("Ajouter un produit")
                 .setView(input)
                 .setPositiveButton("Continuer", new DialogInterface.OnClickListener()
@@ -145,8 +142,8 @@ public class MainActivity extends AppCompatActivity {
     //Demande de la quantité
     private void afficherDialogues2()
     {
-        final EditText input = new EditText(MainActivity.this);
-        new AlertDialog.Builder(MainActivity.this)
+        final EditText input = new EditText(MainCourses.this);
+        new AlertDialog.Builder(MainCourses.this)
                 .setTitle("Ajouter la quantité")
                 .setView(input)
                 .setPositiveButton("Continuer", new DialogInterface.OnClickListener()
@@ -263,7 +260,7 @@ public class MainActivity extends AppCompatActivity {
                 if(courses.get(i).getProduit().equals(tv.getText().toString()))
                 {
                     final int pos = i;
-                    new AlertDialog.Builder(MainActivity.this)
+                    new AlertDialog.Builder(MainCourses.this)
                             .setTitle("Supprimer le produit : " + courses.get(pos).getProduit())
                             .setPositiveButton("Oui", new DialogInterface.OnClickListener()
                             {
