@@ -20,6 +20,7 @@ import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.uqac.frenchies.izicoloc.R;
+import com.uqac.frenchies.izicoloc.activities.accounting.AccountingActivity;
 import com.uqac.frenchies.izicoloc.activities.authentication.Login;
 import com.uqac.frenchies.izicoloc.activities.classes.Profile;
 <<<<<<< HEAD
@@ -69,7 +70,8 @@ public class MainMenu extends AppCompatActivity
         accountingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Activité de Quentin
+                Intent intent = new Intent(MainMenu.this, AccountingActivity.class);
+                MainMenu.this.startActivity(intent);
             }
         });
 

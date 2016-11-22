@@ -7,11 +7,17 @@
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.INTERNET" />
+<<<<<<< HEAD
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STROAGE"/>
+    <uses-permission android:name="android.permission.WRITE_INTERNAL_STORAGE"/>
+=======
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_INTERNAL_STORAGE" />
+>>>>>>> refs/remotes/origin/master
 
     <application
         android:allowBackup="true"
@@ -23,6 +29,20 @@
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
 
+<<<<<<< HEAD
+        <!--<activity-->
+            <!--android:name=".activities.authentication.Login"-->
+            <!--android:label="@string/app_name">-->
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
+        <!--</activity>-->
+        <!--<activity-->
+            <!--android:name="com.facebook.FacebookActivity"-->
+            <!--android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"-->
+            <!--android:label="@string/app_name" />-->
+=======
         <activity
             android:name=".activities.authentication.Login"
             android:label="@string/app_name">
@@ -36,16 +56,31 @@
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:label="@string/app_name" />
+>>>>>>> refs/remotes/origin/master
         <activity
             android:name=".activities.main.MainMenu"
             android:label="@string/title_activity_menu"
+            android:theme="@style/AppTheme.NoActionBar"><intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter></activity>
+
+        <activity
+            android:name=".activities.accounting.AccountingActivity"
+            android:label="Accounting"
             android:theme="@style/AppTheme.NoActionBar"/>
+<<<<<<< HEAD
+<<<<<<< HEAD
+
+=======
+=======
         <activity android:name=".activities.roommates.GestionColocAccueil"/>
         <activity android:name=".activities.roommates.GestionColocAffiche"/>
         <activity android:name=".activities.roommates.GestionColocDetection"/>
         <activity android:name=".activities.roommates.GestionColocMain"/>
         <activity android:name=".activities.roommates.GestionColocValidation"/>
 
+>>>>>>> refs/remotes/origin/master
         <!--<activity
             android:name=".activities.accounting."-->
         <activity
@@ -57,6 +92,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+>>>>>>> refs/remotes/origin/master
     </application>
 
 </manifest>
