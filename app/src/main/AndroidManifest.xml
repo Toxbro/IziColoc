@@ -50,7 +50,8 @@
         <activity android:name=".activities.roommates.GestionColocValidation"/>
         <activity
             android:name=".activities.listecourses.MainCourses"
-            android:label="Courses">
+            android:label="Courses"
+            android:screenOrientation="portrait">
         </activity>
     </application>
 

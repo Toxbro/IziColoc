@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="com.uqac.frenchies.izicoloc.activities.listecourses.MainActivity">
+    tools:context="com.uqac.frenchies.izicoloc.activities.listecourses.MainCourses">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -17,20 +17,53 @@
             android:layout_height="wrap_content"
             android:theme="@style/AppTheme.AppBarOverlay">
 
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="?attr/colorPrimary"
-                app:popupTheme="@style/AppTheme.PopupOverlay" />
         </android.support.design.widget.AppBarLayout>
 
+        <!-- Liste de courses -->
         <ListView
             android:id="@+id/listView"
             android:layout_width="wrap_content"
             android:layout_below="@id/toptoolbar"
             android:layout_height="600dp" />
 
+        <!-- Boutons -->
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/boutons"
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true">
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/supprmier"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_margin="@dimen/fab_margin"
+                app:srcCompat="@android:drawable/ic_menu_delete"
+                app:backgroundTint="@android:color/holo_red_dark"/>
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/refresh"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_margin="@dimen/fab_margin"
+                app:srcCompat="@android:drawable/ic_popup_sync"
+                app:backgroundTint="@android:color/holo_blue_bright"/>
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/ajout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_margin="@dimen/fab_margin"
+                app:srcCompat="@android:drawable/ic_menu_add"
+                app:backgroundTint="@android:color/holo_green_dark"/>
+
+        </RelativeLayout>
+
+        <!-- Text de suggestions -->
         <TextView
             android:id="@+id/textSuggestion"
             android:layout_width="wrap_content"
@@ -40,47 +73,18 @@
             android:text="Suggestions :"
             android:layout_centerInParent="true"/>
 
+        <!-- Liste de suggestions -->
         <GridView xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/gridView"
             android:numColumns="3"
             android:gravity="center"
-            android:columnWidth="100dp"
             android:stretchMode="columnWidth"
             android:layout_below="@id/textSuggestion"
+            android:layout_above="@id/boutons"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent" >
         </GridView>
 
     </RelativeLayout>
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/ajout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@android:drawable/ic_menu_add"
-        app:backgroundTint="@android:color/holo_green_dark" />
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/supprmier"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|start"
-        android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@android:drawable/ic_menu_delete"
-        app:backgroundTint="@android:color/holo_red_dark"
-        app:layout_anchorGravity="bottom|left" />
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/refresh"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerInParent="true"
-        app:srcCompat="@android:drawable/ic_popup_sync"
-        app:backgroundTint="@android:color/holo_blue_bright"
-        app:layout_anchorGravity="top|center_horizontal"
-        android:layout_gravity="bottom|center_horizontal" />
 
 </android.support.design.widget.CoordinatorLayout>
