@@ -53,6 +53,10 @@
             android:label="Courses"
             android:screenOrientation="portrait">
         </activity>
+        <activity
+            android:name=".activities.menus_semaine.ActivityMenusSemaine"
+            android:label="MenusSemaine">
+        </activity>
     </application>
 
 </manifest>
