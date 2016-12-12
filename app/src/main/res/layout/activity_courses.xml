@@ -44,15 +44,6 @@
                 app:backgroundTint="@android:color/holo_red_dark"/>
 
             <android.support.design.widget.FloatingActionButton
-                android:id="@+id/refresh"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:layout_margin="@dimen/fab_margin"
-                app:srcCompat="@android:drawable/ic_popup_sync"
-                app:backgroundTint="@android:color/holo_blue_bright"/>
-
-            <android.support.design.widget.FloatingActionButton
                 android:id="@+id/ajout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
