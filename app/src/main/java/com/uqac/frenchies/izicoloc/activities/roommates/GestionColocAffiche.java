@@ -38,7 +38,7 @@ public class GestionColocAffiche extends AppCompatActivity {
     private ImageView qrCode;
     private Button quitColoc;
 
-    private String getUrl = "http://maelios.zapto.org/izicoloc/getUser.php";
+    private String getUrl = "http://maelios.zapto.org/izicoloc/getCodeColoc.php";
     private String getUrlColoc = "http://maelios.zapto.org/izicoloc/getColoc.php";
     private String getUrlAllColoc = "http://maelios.zapto.org/izicoloc/getAllColoc.php";
     private String setUrl = "http://maelios.zapto.org/izicoloc/insertColoc.php";
