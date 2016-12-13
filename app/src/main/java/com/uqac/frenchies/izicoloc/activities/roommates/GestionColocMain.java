@@ -9,6 +9,10 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -17,6 +21,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.uqac.frenchies.izicoloc.R;
+import com.uqac.frenchies.izicoloc.activities.main.MainMenu;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -26,9 +31,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class GestionColocMain extends AppCompatActivity {
-    private int idUser;
+    private String idUser;
     private String codeColoc;
-    private String getUrl = "http://maelios.zapto.org/izicoloc/getUser.php";
+    private String getUrl = "http://maelios.zapto.org/izicoloc/getCodeColoc.php";
     private RequestQueue requestQueue;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,24 +42,24 @@ public class GestionColocMain extends AppCompatActivity {
         checkPermission();
         requestQueue = Volley.newRequestQueue(getApplicationContext());
         codeColoc="";
-        idUser = 0;
+        idUser = "";
         try {
-            idUser = getIntent().getIntExtra("idUser", 0);
+            String res = getIntent().getStringExtra("idUser");
+            if(!res.isEmpty()){
+                idUser = res;
+            }
         }
         catch (NullPointerException e){
             e.printStackTrace();
         }
-        finally {
-            idUser = 0;
-        }
         try {
-            codeColoc = getIntent().getStringExtra("codeColoc");
+            String res = getIntent().getStringExtra("codeColoc");
+            if(!res.isEmpty()){
+                codeColoc = res;
+            }
         }
         catch (NullPointerException e){
             e.printStackTrace();
-        }
-        finally {
-            codeColoc = "";
         }
         //check si le user est en coloc
         StringRequest postRequest = new StringRequest(Request.Method.POST, getUrl,
@@ -99,7 +104,7 @@ public class GestionColocMain extends AppCompatActivity {
             protected Map<String, String> getParams()
             {
                 Map<String, String>  params = new HashMap<String, String>();
-                params.put("id_user", Integer.toString(idUser));
+                params.put("id_user", idUser);
 
                 return params;
             }
@@ -132,5 +137,32 @@ public class GestionColocMain extends AppCompatActivity {
             default:
                 break;
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu items for use in the action bar
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_main, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle presses on the action bar items
+        switch (item.getItemId()) {
+            case R.id.goMenu:
+                backToAccueil();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    public void backToAccueil(){
+        Intent intent = new Intent(getApplicationContext(), MainMenu.class);
+        intent.putExtra("codeColoc", codeColoc);
+        intent.putExtra("idUser", idUser);
+        startActivity(intent);
     }
 }

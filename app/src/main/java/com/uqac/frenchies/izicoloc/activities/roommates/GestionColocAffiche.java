@@ -4,11 +4,16 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -23,6 +28,7 @@ import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 import com.uqac.frenchies.izicoloc.R;
+import com.uqac.frenchies.izicoloc.activities.main.MainMenu;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -33,9 +39,10 @@ import java.util.Map;
 
 public class GestionColocAffiche extends AppCompatActivity {
     private String codeColoc;
-    private int idUser;
+    private String idUser;
     private TextView code;
     private ImageView qrCode;
+    private Button affMember;
     private Button quitColoc;
 
     private String getUrl = "http://maelios.zapto.org/izicoloc/getCodeColoc.php";
@@ -49,17 +56,39 @@ public class GestionColocAffiche extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gestion_coloc_affiche);
         qrCode = (ImageView) findViewById(R.id.qrCode);
+        affMember = (Button) findViewById(R.id.affColocs);
         quitColoc = (Button) findViewById(R.id.quitColoc);
         requestQueue = Volley.newRequestQueue(getApplicationContext());
-        idUser = getIntent().getIntExtra("idUser",0);
-        try{
-            codeColoc = getIntent().getStringExtra("codeColoc");
+        codeColoc="";
+        idUser = "";
+        try {
+            String res = getIntent().getStringExtra("idUser");
+            if(!res.isEmpty()){
+                idUser = res;
+            }
         }
         catch (NullPointerException e){
-
-        }finally {
-            codeColoc="";
+            e.printStackTrace();
         }
+        try {
+            String res = getIntent().getStringExtra("codeColoc");
+            if(!res.isEmpty()){
+                codeColoc = res;
+            }
+        }
+        catch (NullPointerException e){
+            e.printStackTrace();
+        }
+
+        affMember.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), GestionColocMembre.class);
+                intent.putExtra("codeColoc", codeColoc);
+                intent.putExtra("idUser", idUser);
+                startActivity(intent);
+            }
+        });
         quitColoc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -78,7 +107,7 @@ public class GestionColocAffiche extends AppCompatActivity {
                     @Override
                     protected Map<String, String> getParams() throws AuthFailureError {
                         Map<String, String> params = new HashMap<String, String>();
-                        params.put("id_user", Integer.toString(idUser));
+                        params.put("id_user", idUser);
                         params.put("code_coloc", codeColoc);
 
                         return params;
@@ -158,7 +187,7 @@ public class GestionColocAffiche extends AppCompatActivity {
                                                             @Override
                                                             protected Map<String, String> getParams() throws AuthFailureError {
                                                                 Map<String, String> params = new HashMap<String, String>();
-                                                                params.put("id_user", Integer.toString(idUser));
+                                                                params.put("id_user", idUser);
                                                                 params.put("code_coloc", codeColoc);
 
                                                                 return params;
@@ -208,7 +237,7 @@ public class GestionColocAffiche extends AppCompatActivity {
                 protected Map<String, String> getParams()
                 {
                     Map<String, String>  params = new HashMap<String, String>();
-                    params.put("id_user", Integer.toString(idUser));
+                    params.put("id_user", idUser);
 
                     return params;
                 }
@@ -240,4 +269,32 @@ public class GestionColocAffiche extends AppCompatActivity {
         }
         return pass.toString();
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu items for use in the action bar
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_main, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle presses on the action bar items
+        switch (item.getItemId()) {
+            case R.id.goMenu:
+                backToAccueil();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    public void backToAccueil(){
+        Intent intent = new Intent(getApplicationContext(), MainMenu.class);
+        intent.putExtra("codeColoc", codeColoc);
+        intent.putExtra("idUser", idUser);
+        startActivity(intent);
+    }
+
 }

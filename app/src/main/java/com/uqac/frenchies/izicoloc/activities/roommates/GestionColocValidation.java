@@ -3,6 +3,9 @@ package com.uqac.frenchies.izicoloc.activities.roommates;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -15,12 +18,13 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.uqac.frenchies.izicoloc.R;
+import com.uqac.frenchies.izicoloc.activities.main.MainMenu;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class GestionColocValidation extends AppCompatActivity {
-    private int idUser;
+    private String idUser;
     private TextView code;
     private String codeColoc;
     private Button confirmColoc, cancelColoc;
@@ -31,7 +35,7 @@ public class GestionColocValidation extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gestion_coloc_validation);
         codeColoc = getIntent().getStringExtra("codeColoc");
-        idUser = getIntent().getIntExtra("idUser",0);
+        idUser = getIntent().getStringExtra("idUser");
         requestQueue = Volley.newRequestQueue(getApplicationContext());
         code = (TextView) findViewById(R.id.codeColoc);
         code.setText(codeColoc);
@@ -64,7 +68,7 @@ public class GestionColocValidation extends AppCompatActivity {
                     @Override
                     protected Map<String, String> getParams() throws AuthFailureError {
                         Map<String, String> params = new HashMap<String, String>();
-                        params.put("id_user", Integer.toString(idUser));
+                        params.put("id_user", idUser);
                         params.put("code_coloc", codeColoc);
 
                         return params;
@@ -74,5 +78,32 @@ public class GestionColocValidation extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu items for use in the action bar
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_main, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle presses on the action bar items
+        switch (item.getItemId()) {
+            case R.id.goMenu:
+                backToAccueil();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    public void backToAccueil(){
+        Intent intent = new Intent(getApplicationContext(), MainMenu.class);
+        intent.putExtra("codeColoc", codeColoc);
+        intent.putExtra("idUser", idUser);
+        startActivity(intent);
     }
 }

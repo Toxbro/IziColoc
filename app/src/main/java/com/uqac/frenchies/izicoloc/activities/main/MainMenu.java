@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.uqac.frenchies.izicoloc.R;
 import com.uqac.frenchies.izicoloc.activities.accounting.AccountingActivity;
@@ -24,12 +25,34 @@ import com.uqac.frenchies.izicoloc.activities.listecourses.MainCourses;
 
 public class MainMenu extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-
+    private String idUser;
+    private String codeColoc;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
+        codeColoc="";
+        idUser = "mr@test.com";
+        try {
+            String res = getIntent().getStringExtra("idUser");
+            if(!res.isEmpty()){
+                idUser = res;
+            }
+        }
+        catch (NullPointerException e){
+            e.printStackTrace();
+        }
+        try {
+            String res = getIntent().getStringExtra("codeColoc");
+            if(!res.isEmpty()){
+                codeColoc = res;
+            }
+        }
+        catch (NullPointerException e){
+            e.printStackTrace();
+        }
 
+        //Toast.makeText(getApplicationContext(), idUser, Toast.LENGTH_LONG).show();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -51,7 +74,6 @@ public class MainMenu extends AppCompatActivity
         roommatesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int idUser = 280;
                 Intent intent = new Intent(MainMenu.this, GestionColocMain.class);
                 intent.putExtra("idUser",idUser);
                 startActivity(intent);
