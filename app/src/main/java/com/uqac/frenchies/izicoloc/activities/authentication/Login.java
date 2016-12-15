@@ -311,7 +311,7 @@ public class Login extends AppCompatActivity {
                         JSONArray user = new JSONArray();
                         try {
                             JSONObject jo = new JSONObject(response);
-                            user = jo.getJSONArray("user");
+                            user = jo.getJSONArray("getUser");
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -325,6 +325,7 @@ public class Login extends AppCompatActivity {
                             final String nom=com.uqac.frenchies.izicoloc.tools.classes.Profile.getLastname();
                             final String prenom=com.uqac.frenchies.izicoloc.tools.classes.Profile.getFirstname();
                             final String mail=com.uqac.frenchies.izicoloc.tools.classes.Profile.getEmail();
+                            final String reseau=com.uqac.frenchies.izicoloc.tools.classes.Profile.getIsLoggedWith();
                             String setUrl = "http://maelios.zapto.org/izicoloc/insertUser.php";
                             RequestQueue rQ= Volley.newRequestQueue(getApplicationContext());
                             StringRequest request = new StringRequest(Request.Method.POST, setUrl, new Response.Listener<String>() {
@@ -348,7 +349,7 @@ public class Login extends AppCompatActivity {
                                     params.put("mail_user", mail);
                                     params.put("nom_user", nom);
                                     params.put("prenom_user", prenom);
-                                    //params.put("reseau_user", );
+                                    params.put("reseau_user", reseau);
 
                                     return params;
                                 }

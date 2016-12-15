@@ -78,7 +78,7 @@ public class GestionColocDetection extends AppCompatActivity {
                                     public void onResponse(String response) {
                                         try {
                                             JSONObject jo = new JSONObject(response);
-                                            JSONArray colocs = jo.getJSONArray("colocs");
+                                            JSONArray colocs = jo.getJSONArray("getColoc");
                                             if(colocs.length()!=0){
                                                 Intent intent = new Intent(getApplicationContext(), GestionColocValidation.class);
                                                 intent.putExtra("codeColoc",codeColoc);
@@ -141,7 +141,7 @@ public class GestionColocDetection extends AppCompatActivity {
                             public void onResponse(String response) {
                                 try {
                                     JSONObject jo = new JSONObject(response);
-                                    JSONArray colocs = jo.getJSONArray("colocs");
+                                    JSONArray colocs = jo.getJSONArray("getColoc");
                                     if(colocs.length()!=0){
                                         Intent intent = new Intent(getApplicationContext(), GestionColocValidation.class);
                                         intent.putExtra("codeColoc",code);

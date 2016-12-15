@@ -69,7 +69,7 @@ public class GestionColocMain extends AppCompatActivity {
                     public void onResponse(String response) {
                         try {
                             JSONObject jo = new JSONObject(response);
-                            JSONArray user = jo.getJSONArray("user");
+                            JSONArray user = jo.getJSONArray("getCodeColoc");
                             if(user.length()!=0){
                                 codeColoc = user.getString(0);
                                 String[] tmp = codeColoc.split("\"");

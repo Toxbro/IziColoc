@@ -124,7 +124,7 @@ public class GestionColocAffiche extends AppCompatActivity {
                         public void onResponse(String response) {
                             try {
                                 JSONObject jo = new JSONObject(response);
-                                JSONArray user = jo.getJSONArray("user");
+                                JSONArray user = jo.getJSONArray("getCodeColoc");
                                 if(user.length()!=0){
                                     codeColoc = user.getString(0);
                                     String[] tmp = codeColoc.split("\"");
@@ -150,7 +150,7 @@ public class GestionColocAffiche extends AppCompatActivity {
                                                 public void onResponse(String response) {
                                                     try {
                                                         JSONObject jo = new JSONObject(response);
-                                                        JSONArray colocs = jo.getJSONArray("colocs");
+                                                        JSONArray colocs = jo.getJSONArray("getAllColoc");
                                                         Boolean exist;
                                                         do{
                                                             exist = false;

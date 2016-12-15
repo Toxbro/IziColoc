@@ -72,7 +72,7 @@ public class GestionColocMembre extends AppCompatActivity {
                         JSONArray users = new JSONArray();
                         try {
                             JSONObject jo = new JSONObject(response);
-                            users = jo.getJSONArray("colocs");
+                            users = jo.getJSONArray("getAllColocByCode");
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -148,7 +148,7 @@ public class GestionColocMembre extends AppCompatActivity {
                         JSONArray listUser = new JSONArray();
                         try {
                             JSONObject jo = new JSONObject(response);
-                            listUser = jo.getJSONArray("users");
+                            listUser = jo.getJSONArray("getAllUser");
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
