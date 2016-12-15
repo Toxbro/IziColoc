@@ -38,7 +38,7 @@ public class ActivityMenusSemaine extends AppCompatActivity
     ListView listeMenus;
     List<Menu> menus;
     MenuAdapter menuAdapter;
-    String codeColoc = "XER435";
+    String codeColoc = "XER4356";
 
     List<String> donnees;
 
@@ -81,6 +81,7 @@ public class ActivityMenusSemaine extends AppCompatActivity
 
         loadData();
 
+        listeMenus.setOnItemClickListener(new ClicList());
         listeMenus.setOnItemLongClickListener(new LongItemList());
     }
 
@@ -176,11 +177,11 @@ public class ActivityMenusSemaine extends AppCompatActivity
         menuAdapter.notifyDataSetChanged();
     }
 
-    //Long clic sur un item de la liste
-    class LongItemList implements AdapterView.OnItemLongClickListener
+    //Édite le jour cliqué et met à jour la BDD
+    class ClicList implements AdapterView.OnItemClickListener
     {
         @Override
-        public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id)
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id)
         {
             //Récupération de l'élément cliqué
             ViewGroup vg = (ViewGroup) view;
@@ -232,6 +233,25 @@ public class ActivityMenusSemaine extends AppCompatActivity
                             })
                             .show();
                     menuAdapter.notifyDataSetChanged();
+                }
+        }
+    }
+
+    //Ajoute l'élément cliqué à la liste de courses
+    class LongItemList implements AdapterView.OnItemLongClickListener
+    {
+        @Override
+        public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id)
+        {
+            //Récupération de l'élément cliqué
+            ViewGroup vg = (ViewGroup) view;
+            TextView tv = (TextView)vg.findViewById(R.id.jour);
+            //Recherche dans la liste
+            for(int i=0 ; i<menus.size() ; i++)
+                if(menus.get(i).getJour().equals(tv.getText().toString()))
+                {
+                    dialogueAjout1(i);
+                    dialogueAjout2(i);
                 }
             return true; //Vérification clic long
         }
@@ -356,6 +376,46 @@ public class ActivityMenusSemaine extends AppCompatActivity
             return false;
     }
 
+    private void dialogueAjout1(final int index)
+    {
+        final EditText input = new EditText(ActivityMenusSemaine.this);
+        new AlertDialog.Builder(ActivityMenusSemaine.this)
+                .setTitle("Ajouter une decription de " + menus.get(index).getMidi() + " pour l'ajouter à la liste de courses")
+                .setView(input)
+                .setPositiveButton("Ajouter", new DialogInterface.OnClickListener()
+                {
+                    public void onClick(DialogInterface dialog, int whichButton)
+                    {
+                        addElemBDDCourses(menus.get(index).getMidi(), input.getText().toString());
+                    }
+                })
+                .setNegativeButton("Ne pas ajouter", new DialogInterface.OnClickListener()
+                {
+                    public void onClick(DialogInterface dialog, int whichButton){}
+                })
+                .show();
+    }
+
+    private void dialogueAjout2(final int index)
+    {
+        final EditText input = new EditText(ActivityMenusSemaine.this);
+        new AlertDialog.Builder(ActivityMenusSemaine.this)
+                .setTitle("Ajouter une decription de " + menus.get(index).getSoir() + " pour l'ajouter à la liste de courses")
+                .setView(input)
+                .setPositiveButton("Ajouter", new DialogInterface.OnClickListener()
+                {
+                    public void onClick(DialogInterface dialog, int whichButton)
+                    {
+                        addElemBDDCourses(menus.get(index).getSoir(), input.getText().toString());
+                    }
+                })
+                .setNegativeButton("Ne pas ajouter", new DialogInterface.OnClickListener()
+                {
+                    public void onClick(DialogInterface dialog, int whichButton){}
+                })
+                .show();
+    }
+
     private void initBDD()
     {
         for(int i=0 ; i<jours.size() ; i++)
@@ -389,5 +449,37 @@ public class ActivityMenusSemaine extends AppCompatActivity
             }
         };
         requestQueue.add(request);
+    }
+
+    private void addElemBDDCourses(final String prod, final String descr)
+    {
+        if(internetConnection())
+        {
+            String setUrl = "http://maelios.zapto.org/izicoloc/insertCourse.php";
+            RequestQueue requestQueue;
+            requestQueue = Volley.newRequestQueue(getApplicationContext());
+            StringRequest request = new StringRequest(Request.Method.POST, setUrl, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+
+                }
+            }) {
+                @Override
+                protected Map<String, String> getParams() throws AuthFailureError {
+                    Map<String, String> params = new HashMap<String, String>();
+                    params.put("code_coloc", codeColoc);
+                    params.put("name_item", prod);
+                    params.put("desc_item", descr);
+
+                    return params;
+                }
+            };
+            requestQueue.add(request);
+        }
     }
 }
