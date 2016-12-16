@@ -38,7 +38,7 @@ public class ActivityMenusSemaine extends AppCompatActivity
     ListView listeMenus;
     List<Menu> menus;
     MenuAdapter menuAdapter;
-    String codeColoc = "XER4356";
+    String codeColoc = "";
 
     List<String> donnees;
 
@@ -52,6 +52,16 @@ public class ActivityMenusSemaine extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menus_semaine);
+
+        try{
+            String res = getIntent().getStringExtra("codeColoc");
+            if(res != null)
+                codeColoc = res;
+        }
+        catch(NullPointerException e){
+            e.printStackTrace();
+        }
+
 
         sharedPreferences = getPreferences(MODE_PRIVATE); //Données locales
 

@@ -52,7 +52,7 @@ public class MainCourses extends AppCompatActivity
 
     SharedPreferences sharedPreferences;
     int nbSuggestion = 0;
-    String codeColoc = "XER4356";
+    String codeColoc = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -60,6 +60,15 @@ public class MainCourses extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_courses);
 
+        try{
+            String res = getIntent().getStringExtra("codeColoc");
+            if(res != null)
+                codeColoc = res;
+        }
+        catch(NullPointerException e){
+            e.printStackTrace();
+        }
+        
         //Bouton d'ajout 1
         FloatingActionButton boutonAjout = (FloatingActionButton) findViewById(R.id.ajout);
         boutonAjout.setOnClickListener(new View.OnClickListener()
