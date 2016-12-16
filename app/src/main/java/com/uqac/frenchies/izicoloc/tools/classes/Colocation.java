@@ -85,5 +85,6 @@ public class Colocation {
         accounts.clear();
         colocataires.clear();
         expenses.clear();
+        id = null;
     }
 }

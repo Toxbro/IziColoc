@@ -304,7 +304,6 @@ public class Login extends AppCompatActivity {
 
     private void loginSuccess(){
         final String idUser = com.uqac.frenchies.izicoloc.tools.classes.Profile.getEmail();
-        System.out.println(idUser+"QWERTYUIOP");
         String getUrl = "http://maelios.zapto.org/izicoloc/getUser.php";
         RequestQueue requestQueue= Volley.newRequestQueue(getApplicationContext());
         StringRequest postRequest = new StringRequest(Request.Method.POST, getUrl,
@@ -312,7 +311,6 @@ public class Login extends AppCompatActivity {
                 {
                     @Override
                     public void onResponse(String response) {
-                        System.out.println("Hello");
                         JSONArray user = null;
                         try {
                             JSONObject jo = new JSONObject(response);
@@ -322,13 +320,11 @@ public class Login extends AppCompatActivity {
                             e.printStackTrace();
                         }
                         if(user.length()>0){
-                            System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
                             Intent intent = new Intent(getApplicationContext(), com.uqac.frenchies.izicoloc.activities.main.MainMenu.class);
                             intent.putExtra("idUser", idUser);
                             startActivity(intent);
                         }
                         else{
-                            System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBB");
                             final String nom=com.uqac.frenchies.izicoloc.tools.classes.Profile.getLastname();
                             final String prenom=com.uqac.frenchies.izicoloc.tools.classes.Profile.getFirstname();
                             final String mail=com.uqac.frenchies.izicoloc.tools.classes.Profile.getEmail();

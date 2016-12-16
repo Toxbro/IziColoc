@@ -217,7 +217,7 @@ public class MainMenu extends AppCompatActivity
                             if(user!=null){
                                 setCodeColoc(user.getJSONObject(0).getString("code_coloc"));
                                 chargeColoc(user.getJSONObject(0).getString("code_coloc"),idUser);
-                                //ici ajouter Colocation.setId(user.getJSONObject(0).getString("code_coloc"))
+                                Colocation.setId(user.getJSONObject(0).getString("code_coloc"));
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();

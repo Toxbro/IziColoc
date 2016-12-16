@@ -97,7 +97,7 @@ public class GestionColocAffiche extends AppCompatActivity {
                 StringRequest request = new StringRequest(Request.Method.POST, delUrl, new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        //remove la liste Colocation.
+                        Colocation.resetColoc();
                         Intent intent = new Intent(getApplicationContext(), GestionColocMain.class);
                         intent.putExtra("idUser", idUser);
                         startActivity(intent);
