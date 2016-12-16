@@ -217,6 +217,7 @@ public class MainMenu extends AppCompatActivity
                             if(user!=null){
                                 setCodeColoc(user.getJSONObject(0).getString("code_coloc"));
                                 chargeColoc(user.getJSONObject(0).getString("code_coloc"),idUser);
+                                //ici ajouter Colocation.setId(user.getJSONObject(0).getString("code_coloc"))
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -315,11 +316,11 @@ public class MainMenu extends AppCompatActivity
                                     coloc.setFirstname(listUser.getJSONObject(i).getString("prenom_user"));
                                     coloc.setLastname(listUser.getJSONObject(i).getString("nom_user"));
                                     com.uqac.frenchies.izicoloc.tools.classes.Colocation.addColocataire(coloc);
-                                    System.out.println("////////////////////////////////////////");
-                                    System.out.println(coloc.getEmail());
-                                    System.out.println(coloc.getFirstname());
-                                    System.out.println(coloc.getLastname());
-                                    System.out.println(Colocation.getColocataires().size());
+                                    //System.out.println("////////////////////////////////////////");
+                                    //System.out.println(coloc.getEmail());
+                                    //System.out.println(coloc.getFirstname());
+                                    //System.out.println(coloc.getLastname());
+                                    //System.out.println(Colocation.getColocataires().size());
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
