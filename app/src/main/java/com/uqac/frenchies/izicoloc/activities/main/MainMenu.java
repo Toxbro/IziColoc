@@ -2,6 +2,7 @@ package com.uqac.frenchies.izicoloc.activities.main;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -15,21 +16,64 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.uqac.frenchies.izicoloc.R;
 import com.uqac.frenchies.izicoloc.activities.accounting.AccountingActivity;
 import com.uqac.frenchies.izicoloc.activities.authentication.Login;
+import com.uqac.frenchies.izicoloc.tools.classes.Colocation;
 import com.uqac.frenchies.izicoloc.tools.classes.Profile;
 import com.uqac.frenchies.izicoloc.activities.roommates.GestionColocMain;
 import com.uqac.frenchies.izicoloc.activities.listecourses.MainCourses;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 public class MainMenu extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-
+    private String idUser;
+    private static String codeColoc;
+    private ArrayList<String> listMail = new ArrayList<String>();
+    private RequestQueue requestQueue;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
-
+        requestQueue = Volley.newRequestQueue(getApplicationContext());
+        requestQueue.start();
+        setCodeColoc("");
+        idUser = "mr@test.com";
+        try {
+            String res = getIntent().getStringExtra("idUser");
+            if(res!=null){
+                idUser = res;
+            }
+        }
+        catch (NullPointerException e){
+            e.printStackTrace();
+        }
+        try {
+            String res = getIntent().getStringExtra("codeColoc");
+            if(res!=null){
+                setCodeColoc(res);
+            }
+        }
+        catch (NullPointerException e){
+            e.printStackTrace();
+        }
+        if(Colocation.getColocataires().size()==0) {
+            getCodeColoc(idUser);
+        }
+        //Toast.makeText(getApplicationContext(), idUser, Toast.LENGTH_LONG).show();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -51,7 +95,6 @@ public class MainMenu extends AppCompatActivity
         roommatesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int idUser = 280;
                 Intent intent = new Intent(MainMenu.this, GestionColocMain.class);
                 intent.putExtra("idUser",idUser);
                 startActivity(intent);
@@ -64,8 +107,17 @@ public class MainMenu extends AppCompatActivity
         accountingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainMenu.this, AccountingActivity.class);
-                MainMenu.this.startActivity(intent);
+                if(codeColoc.isEmpty()){
+                    Intent intent = new Intent(MainMenu.this, GestionColocMain.class);
+                    intent.putExtra("idUser",idUser);
+                    startActivity(intent);
+                }else{
+                    Intent intent = new Intent(MainMenu.this, AccountingActivity.class);
+                    intent.putExtra("idUser",idUser);
+                    intent.putExtra("codeColoc",getCodeColoc());
+                    MainMenu.this.startActivity(intent);
+                }
+
             }
         });
 
@@ -74,8 +126,16 @@ public class MainMenu extends AppCompatActivity
             @Override
             public void onClick(View v) {
                 //Activité de Dylan
-                Intent myIntent = new Intent(MainMenu.this, MainCourses.class);
-                MainMenu.this.startActivity(myIntent);
+                if(codeColoc.isEmpty()){
+                    Intent intent = new Intent(MainMenu.this, GestionColocMain.class);
+                    intent.putExtra("idUser",idUser);
+                    startActivity(intent);
+                }else {
+                    Intent myIntent = new Intent(MainMenu.this, MainCourses.class);
+                    myIntent.putExtra("idUser",idUser);
+                    myIntent.putExtra("codeColoc",getCodeColoc());
+                    MainMenu.this.startActivity(myIntent);
+                }
             }
         });
     }
@@ -142,5 +202,160 @@ public class MainMenu extends AppCompatActivity
         Login.getmInstance().logout();
         Intent intent = new Intent(MainMenu.this, Login.class);
         startActivity(intent);
+    }
+
+    public void getCodeColoc(final String idUser){
+        String getUrl = "http://maelios.zapto.org/izicoloc/getCodeColoc.php";
+        StringRequest postRequest = new StringRequest(Request.Method.POST, getUrl,
+                new Response.Listener<String>()
+                {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject jo = new JSONObject(response);
+                            JSONArray user = jo.getJSONArray("getCodeColoc");
+                            if(user!=null){
+                                setCodeColoc(user.getJSONObject(0).getString("code_coloc"));
+                                chargeColoc(user.getJSONObject(0).getString("code_coloc"),idUser);
+                                //ici ajouter Colocation.setId(user.getJSONObject(0).getString("code_coloc"))
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener()
+                {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // error
+                        Log.d("Error.Response", error.toString());
+                    }
+                }
+        ) {
+            @Override
+            protected Map<String, String> getParams()
+            {
+                Map<String, String>  params = new HashMap<String, String>();
+                params.put("id_user", idUser);
+
+                return params;
+            }
+        };
+        requestQueue.add(postRequest);
+    }
+
+    public void chargeColoc(final String codeColoc, final String idUser){
+        //System.out.println("CodeColoc "+codeColoc+" idUser "+idUser);
+        if(!codeColoc.isEmpty()) {
+            String getUrlAllColoc = "http://maelios.zapto.org/izicoloc/getAllColocByCode.php";
+            StringRequest postRequest = new StringRequest(Request.Method.POST, getUrlAllColoc,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            JSONArray users = new JSONArray();
+                            try {
+                                JSONObject jo = new JSONObject(response);
+                                users = jo.getJSONArray("getAllColocByCode");
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            if (users.length() != 0) {
+                                for (int i = 0; i < users.length(); i++) {
+                                    try {
+                                        listMail.add(users.getJSONObject(i).getString("id_user"));
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                                addUser(listMail);
+                            }
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            // error
+                            Log.d("Error.Response", error.toString());
+                        }
+                    }
+            ) {
+                @Override
+                protected Map<String, String> getParams() {
+                    Map<String, String> params = new HashMap<String, String>();
+                    params.put("code_coloc", codeColoc);
+
+                    return params;
+                }
+            };
+            requestQueue.add(postRequest);
+        }
+
+    }
+
+    public void addUser(final ArrayList<String> mail){
+        String getUrlUser = "http://maelios.zapto.org/izicoloc/getAllUser.php";
+        StringRequest postReq = new StringRequest(Request.Method.POST, getUrlUser,
+                new Response.Listener<String>()
+                {
+                    @Override
+                    public void onResponse(String response) {
+                        JSONArray listUser = new JSONArray();
+                        try {
+                            JSONObject jo = new JSONObject(response);
+                            listUser = jo.getJSONArray("getAllUser");
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        for(int i=0; i<listUser.length(); i++) {
+                            try {
+                                if (mail.contains(listUser.getJSONObject(i).getString("mail_user"))) {
+                                    com.uqac.frenchies.izicoloc.tools.classes.Colocataire coloc = new com.uqac.frenchies.izicoloc.tools.classes.Colocataire();
+                                    coloc.setEmail(listUser.getJSONObject(i).getString("mail_user"));
+                                    coloc.setFirstname(listUser.getJSONObject(i).getString("prenom_user"));
+                                    coloc.setLastname(listUser.getJSONObject(i).getString("nom_user"));
+                                    com.uqac.frenchies.izicoloc.tools.classes.Colocation.addColocataire(coloc);
+                                    //System.out.println("////////////////////////////////////////");
+                                    //System.out.println(coloc.getEmail());
+                                    //System.out.println(coloc.getFirstname());
+                                    //System.out.println(coloc.getLastname());
+                                    //System.out.println(Colocation.getColocataires().size());
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                },
+                new Response.ErrorListener()
+                {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // error
+                        Log.d("Error.Response", error.toString());
+                    }
+                }
+        ) {
+            @Override
+            protected Map<String, String> getParams()
+            {
+                Map<String, String>  params = new HashMap<String, String>();
+                return params;
+            }
+        };
+        requestQueue.add(postReq);
+    }
+
+    public void setColocation(){
+
+    }
+
+    public String getCodeColoc() {
+        return codeColoc;
+    }
+
+    public void setCodeColoc(String codeColoc) {
+        this.codeColoc = codeColoc;
     }
 }

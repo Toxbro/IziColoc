@@ -51,6 +51,11 @@
         android:layout_weight="1"/>
 
     <Button
+        android:text="Afficher les membres de la Colocation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/affColocs" />
+    <Button
         android:text="Quitter la Colocation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

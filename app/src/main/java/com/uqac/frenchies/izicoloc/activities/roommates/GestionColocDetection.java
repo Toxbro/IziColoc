@@ -5,6 +5,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,6 +22,7 @@ import com.android.volley.toolbox.Volley;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.uqac.frenchies.izicoloc.R;
+import com.uqac.frenchies.izicoloc.activities.main.MainMenu;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -28,7 +32,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class GestionColocDetection extends AppCompatActivity {
-    private int idUser;
+    private String idUser;
     private Button scanColoc;
     private Button checkColoc;
     private EditText numColoc;
@@ -40,7 +44,7 @@ public class GestionColocDetection extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gestion_coloc_detection);
-        idUser = getIntent().getIntExtra("idUser",0);
+        idUser = getIntent().getStringExtra("idUser");
         scanColoc = (Button) findViewById(R.id.scanColoc);
         requestQueue = Volley.newRequestQueue(getApplicationContext());
         final Activity activity = this;
@@ -74,7 +78,7 @@ public class GestionColocDetection extends AppCompatActivity {
                                     public void onResponse(String response) {
                                         try {
                                             JSONObject jo = new JSONObject(response);
-                                            JSONArray colocs = jo.getJSONArray("colocs");
+                                            JSONArray colocs = jo.getJSONArray("getColoc");
                                             if(colocs.length()!=0){
                                                 Intent intent = new Intent(getApplicationContext(), GestionColocValidation.class);
                                                 intent.putExtra("codeColoc",codeColoc);
@@ -103,7 +107,6 @@ public class GestionColocDetection extends AppCompatActivity {
                             {
                                 Map<String, String>  params = new HashMap<String, String>();
                                 params.put("code_coloc", codeColoc);
-
                                 return params;
                             }
                         };
@@ -137,7 +140,7 @@ public class GestionColocDetection extends AppCompatActivity {
                             public void onResponse(String response) {
                                 try {
                                     JSONObject jo = new JSONObject(response);
-                                    JSONArray colocs = jo.getJSONArray("colocs");
+                                    JSONArray colocs = jo.getJSONArray("getColoc");
                                     if(colocs.length()!=0){
                                         Intent intent = new Intent(getApplicationContext(), GestionColocValidation.class);
                                         intent.putExtra("codeColoc",code);
@@ -176,5 +179,32 @@ public class GestionColocDetection extends AppCompatActivity {
         else{
             super.onActivityResult(requestCode, resultCode, data);
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu items for use in the action bar
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_main, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle presses on the action bar items
+        switch (item.getItemId()) {
+            case R.id.goMenu:
+                backToAccueil();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    public void backToAccueil(){
+        Intent intent = new Intent(getApplicationContext(), MainMenu.class);
+        intent.putExtra("codeColoc", codeColoc);
+        intent.putExtra("idUser", idUser);
+        startActivity(intent);
     }
 }

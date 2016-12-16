@@ -15,6 +15,13 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -41,13 +48,16 @@ import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.uqac.frenchies.izicoloc.R;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 public class Login extends AppCompatActivity {
@@ -290,9 +300,91 @@ public class Login extends AppCompatActivity {
     }
 
     private void loginSuccess(){
+        final String idUser = com.uqac.frenchies.izicoloc.tools.classes.Profile.getEmail();
+        String getUrl = "http://maelios.zapto.org/izicoloc/getUser.php";
+        RequestQueue requestQueue= Volley.newRequestQueue(getApplicationContext());
+        StringRequest postRequest = new StringRequest(Request.Method.POST, getUrl,
+                new Response.Listener<String>()
+                {
+                    @Override
+                    public void onResponse(String response) {
+                        JSONArray user = new JSONArray();
+                        try {
+                            JSONObject jo = new JSONObject(response);
+                            user = jo.getJSONArray("getUser");
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        if(user.length()!=0){
+                            Intent intent = new Intent(getApplicationContext(), com.uqac.frenchies.izicoloc.activities.main.MainMenu.class);
+                            intent.putExtra("idUser", idUser);
+                            startActivity(intent);
+                        }
+                        else{
+                            final String nom=com.uqac.frenchies.izicoloc.tools.classes.Profile.getLastname();
+                            final String prenom=com.uqac.frenchies.izicoloc.tools.classes.Profile.getFirstname();
+                            final String mail=com.uqac.frenchies.izicoloc.tools.classes.Profile.getEmail();
+                            final String reseau=com.uqac.frenchies.izicoloc.tools.classes.Profile.getIsLoggedWith();
+                            String setUrl = "http://maelios.zapto.org/izicoloc/insertUser.php";
+                            RequestQueue rQ= Volley.newRequestQueue(getApplicationContext());
+                            StringRequest request = new StringRequest(Request.Method.POST, setUrl, new Response.Listener<String>() {
+                                @Override
+
+                                public void onResponse(String response) {
+                                    Intent intent = new Intent(getApplicationContext(), com.uqac.frenchies.izicoloc.activities.main.MainMenu.class);
+                                    intent.putExtra("idUser", mail);
+                                    startActivity(intent);
+                                }
+                            }, new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+
+                                }
+                            }) {
+                                @Override
+                                //ICI Déclaration des paratrèmes POST de la requete
+                                protected Map<String, String> getParams() throws AuthFailureError {
+                                    Map<String, String> params = new HashMap<String, String>();
+                                    params.put("mail_user", mail);
+                                    params.put("nom_user", nom);
+                                    params.put("prenom_user", prenom);
+                                    params.put("reseau_user", reseau);
+
+                                    return params;
+                                }
+                            };
+                            rQ.add(request);
+                        }
+                    }
+                },
+                new Response.ErrorListener()
+                {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // error
+                        Log.d("Error.Response", error.toString());
+                    }
+                }
+        ) {
+            @Override
+            protected Map<String, String> getParams()
+            {
+                Map<String, String>  params = new HashMap<String, String>();
+                params.put("mail_user", idUser);
+
+                return params;
+            }
+        };
+        requestQueue.add(postRequest);
+
+
+
+
+
         //Toast.makeText(getApplicationContext(), "C'EST BON T'ES CONNECTÉ !", Toast.LENGTH_LONG).show();
-        Intent intent = new Intent(this, com.uqac.frenchies.izicoloc.activities.main.MainMenu.class);
-        startActivity(intent);
+        //Intent intent = new Intent(this, com.uqac.frenchies.izicoloc.activities.main.MainMenu.class);
+        //startActivity(intent);
     }
 
     public static Bitmap getFacebookProfilePicture(String userID){
