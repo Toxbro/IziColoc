@@ -76,7 +76,7 @@ public class Login extends AppCompatActivity {
 
     private ProfileTracker profileTracker;
 
-    private String facebookEmail;
+    private String facebookEmail = null;
 
     private String facebookBirthday;
 
@@ -114,7 +114,7 @@ public class Login extends AppCompatActivity {
                     d.setBounds(0, 0, d.getIntrinsicWidth(), d.getIntrinsicHeight());
                     ImageSpan span = new ImageSpan(d, ImageSpan.ALIGN_BASELINE);
                     ss.setSpan(span, 0, 3, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
-                    textView.setText(ss);
+                    //textView.setText(ss);
 
                 }
             }
@@ -200,8 +200,10 @@ public class Login extends AppCompatActivity {
         }
 
         isConnectedWithFacebook = Profile.getCurrentProfile() != null;
-        if (isConnected())
-            loginSuccess();
+        if (isConnected()) {
+            System.out.println("Is connected");
+            //loginSuccess();
+        }
     }
 
     @Override
@@ -221,6 +223,11 @@ public class Login extends AppCompatActivity {
                             facebookEmail = object.getString("email");
                             facebookBirthday = object.getString("birthday"); // 01/31/1980 format
                             com.uqac.frenchies.izicoloc.tools.classes.Profile.setEmail(facebookEmail);
+                            com.uqac.frenchies.izicoloc.tools.classes.Profile.setFirstname(Profile.getCurrentProfile().getFirstName());
+                            com.uqac.frenchies.izicoloc.tools.classes.Profile.setLastname(Profile.getCurrentProfile().getLastName());
+                            com.uqac.frenchies.izicoloc.tools.classes.Profile.setPicture(new BitmapDrawable(getResources(), getFacebookProfilePicture(Profile.getCurrentProfile().getId())));
+                            com.uqac.frenchies.izicoloc.tools.classes.Profile.setIsLoggedWith("facebook");
+                            loginSuccess();
                             try {
                                 com.uqac.frenchies.izicoloc.tools.classes.Profile.setBirthday(DateFormat.getDateInstance(DateFormat.SHORT, Locale.FRANCE).parse(facebookBirthday));
                             } catch (ParseException e) {
@@ -255,23 +262,19 @@ public class Login extends AppCompatActivity {
             return true;
         }
         else if (isConnectedWithFacebook){
+            System.out.println("Is connected with Facebook");
             getFacebookAdditionalInformation(AccessToken.getCurrentAccessToken());
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            com.uqac.frenchies.izicoloc.tools.classes.Profile.setFirstname(Profile.getCurrentProfile().getFirstName());
-            com.uqac.frenchies.izicoloc.tools.classes.Profile.setLastname(Profile.getCurrentProfile().getLastName());
-            com.uqac.frenchies.izicoloc.tools.classes.Profile.setEmail(facebookEmail);
-            com.uqac.frenchies.izicoloc.tools.classes.Profile.setPicture(new BitmapDrawable(getResources(), getFacebookProfilePicture(Profile.getCurrentProfile().getId())));
-            try {
+            //com.uqac.frenchies.izicoloc.tools.classes.Profile.setFirstname(Profile.getCurrentProfile().getFirstName());
+            //com.uqac.frenchies.izicoloc.tools.classes.Profile.setLastname(Profile.getCurrentProfile().getLastName());
+            //com.uqac.frenchies.izicoloc.tools.classes.Profile.setEmail(facebookEmail);
+            //com.uqac.frenchies.izicoloc.tools.classes.Profile.setPicture(new BitmapDrawable(getResources(), getFacebookProfilePicture(Profile.getCurrentProfile().getId())));
+            /*try {
                 if (facebookBirthday != null)
                     com.uqac.frenchies.izicoloc.tools.classes.Profile.setBirthday(DateFormat.getDateInstance(DateFormat.SHORT, Locale.FRANCE).parse(facebookBirthday));
             } catch (ParseException e) {
                 e.printStackTrace();
-            }
-            com.uqac.frenchies.izicoloc.tools.classes.Profile.setIsLoggedWith("facebook");
+            }*/
+            //com.uqac.frenchies.izicoloc.tools.classes.Profile.setIsLoggedWith("facebook");
             return true;
         }
         else {
@@ -301,6 +304,7 @@ public class Login extends AppCompatActivity {
 
     private void loginSuccess(){
         final String idUser = com.uqac.frenchies.izicoloc.tools.classes.Profile.getEmail();
+        System.out.println(idUser+"QWERTYUIOP");
         String getUrl = "http://maelios.zapto.org/izicoloc/getUser.php";
         RequestQueue requestQueue= Volley.newRequestQueue(getApplicationContext());
         StringRequest postRequest = new StringRequest(Request.Method.POST, getUrl,
@@ -308,20 +312,23 @@ public class Login extends AppCompatActivity {
                 {
                     @Override
                     public void onResponse(String response) {
-                        JSONArray user = new JSONArray();
+                        System.out.println("Hello");
+                        JSONArray user = null;
                         try {
                             JSONObject jo = new JSONObject(response);
                             user = jo.getJSONArray("getUser");
-
+                            System.out.println("USER : "+user);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        if(user.length()!=0){
+                        if(user.length()>0){
+                            System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
                             Intent intent = new Intent(getApplicationContext(), com.uqac.frenchies.izicoloc.activities.main.MainMenu.class);
                             intent.putExtra("idUser", idUser);
                             startActivity(intent);
                         }
                         else{
+                            System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBB");
                             final String nom=com.uqac.frenchies.izicoloc.tools.classes.Profile.getLastname();
                             final String prenom=com.uqac.frenchies.izicoloc.tools.classes.Profile.getFirstname();
                             final String mail=com.uqac.frenchies.izicoloc.tools.classes.Profile.getEmail();

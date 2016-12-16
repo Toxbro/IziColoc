@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -51,7 +52,7 @@ public class MainMenu extends AppCompatActivity
         requestQueue = Volley.newRequestQueue(getApplicationContext());
         requestQueue.start();
         setCodeColoc("");
-        idUser = "mr@test.com";
+        idUser = "";
         try {
             String res = getIntent().getStringExtra("idUser");
             if(res!=null){
@@ -73,7 +74,6 @@ public class MainMenu extends AppCompatActivity
         if(Colocation.getColocataires().size()==0) {
             getCodeColoc(idUser);
         }
-        //Toast.makeText(getApplicationContext(), idUser, Toast.LENGTH_LONG).show();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -316,11 +316,11 @@ public class MainMenu extends AppCompatActivity
                                     coloc.setFirstname(listUser.getJSONObject(i).getString("prenom_user"));
                                     coloc.setLastname(listUser.getJSONObject(i).getString("nom_user"));
                                     com.uqac.frenchies.izicoloc.tools.classes.Colocation.addColocataire(coloc);
-                                    //System.out.println("////////////////////////////////////////");
-                                    //System.out.println(coloc.getEmail());
-                                    //System.out.println(coloc.getFirstname());
-                                    //System.out.println(coloc.getLastname());
-                                    //System.out.println(Colocation.getColocataires().size());
+                                    System.out.println("////////////////////////////////////////");
+                                    System.out.println(coloc.getEmail());
+                                    System.out.println(coloc.getFirstname());
+                                    System.out.println(coloc.getLastname());
+                                    System.out.println(Colocation.getColocataires().size());
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
