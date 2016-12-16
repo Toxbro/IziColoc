@@ -22,6 +22,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.uqac.frenchies.izicoloc.R;
 import com.uqac.frenchies.izicoloc.activities.main.MainMenu;
+import com.uqac.frenchies.izicoloc.tools.classes.AccesBDD;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -45,7 +46,7 @@ public class GestionColocMain extends AppCompatActivity {
         idUser = "";
         try {
             String res = getIntent().getStringExtra("idUser");
-            if(!res.isEmpty()){
+            if(res!=null){
                 idUser = res;
             }
         }
@@ -54,7 +55,7 @@ public class GestionColocMain extends AppCompatActivity {
         }
         try {
             String res = getIntent().getStringExtra("codeColoc");
-            if(!res.isEmpty()){
+            if(res!=null){
                 codeColoc = res;
             }
         }
@@ -62,6 +63,22 @@ public class GestionColocMain extends AppCompatActivity {
             e.printStackTrace();
         }
         //check si le user est en coloc
+        /*AccesBDD req = new AccesBDD();
+        HashMap<String,String> params = new HashMap<String, String>();
+        params.put("id_user", idUser);
+        req.setParams(getApplicationContext(),"getCodeColoc",params);
+        new Thread(req).start();
+        JSONObject jo = null;
+        JSONArray user = null;
+        try {
+            jo = new JSONObject(req.getResultat());
+            user = jo.getJSONArray("getCodeColoc");
+            if (user.length()!=0){
+                System.out.println("IZIIIIIIIIIIIIIIIIIII");
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }*/
         StringRequest postRequest = new StringRequest(Request.Method.POST, getUrl,
                 new Response.Listener<String>()
                 {
@@ -111,6 +128,8 @@ public class GestionColocMain extends AppCompatActivity {
         };
         requestQueue.add(postRequest);
     }
+
+
 
     private Boolean checkPermission(){
         int permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE);

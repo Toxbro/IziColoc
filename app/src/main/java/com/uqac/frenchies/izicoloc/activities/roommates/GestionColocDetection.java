@@ -107,7 +107,6 @@ public class GestionColocDetection extends AppCompatActivity {
                             {
                                 Map<String, String>  params = new HashMap<String, String>();
                                 params.put("code_coloc", codeColoc);
-
                                 return params;
                             }
                         };

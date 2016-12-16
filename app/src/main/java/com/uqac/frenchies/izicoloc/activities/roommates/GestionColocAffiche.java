@@ -29,6 +29,8 @@ import com.google.zxing.common.BitMatrix;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 import com.uqac.frenchies.izicoloc.R;
 import com.uqac.frenchies.izicoloc.activities.main.MainMenu;
+import com.uqac.frenchies.izicoloc.tools.classes.Colocataire;
+import com.uqac.frenchies.izicoloc.tools.classes.Colocation;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -63,7 +65,7 @@ public class GestionColocAffiche extends AppCompatActivity {
         idUser = "";
         try {
             String res = getIntent().getStringExtra("idUser");
-            if(!res.isEmpty()){
+            if(res!=null){
                 idUser = res;
             }
         }
@@ -72,7 +74,7 @@ public class GestionColocAffiche extends AppCompatActivity {
         }
         try {
             String res = getIntent().getStringExtra("codeColoc");
-            if(!res.isEmpty()){
+            if(res!=null){
                 codeColoc = res;
             }
         }
@@ -95,7 +97,9 @@ public class GestionColocAffiche extends AppCompatActivity {
                 StringRequest request = new StringRequest(Request.Method.POST, delUrl, new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+                        //remove la liste Colocation.
                         Intent intent = new Intent(getApplicationContext(), GestionColocMain.class);
+                        intent.putExtra("idUser", idUser);
                         startActivity(intent);
                     }
                 }, new Response.ErrorListener() {
