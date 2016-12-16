@@ -22,33 +22,9 @@ public class Colocataire {
 
     private Date birthday;
 
-    private int id;
-
     private Drawable picture;
 
     public Colocataire() {}
-
-//    public Colocataire(String s){
-//        String[] splitted = s.split(";");
-//        for(String temp : splitted){
-//            String[] value = temp.split(":");
-//            switch(value[0]){
-//                case "Id": { this.id = Integer.parseInt(value[1]); }
-//                case "Firstname": { this.firstname = value[1]; }
-//                case "Lastname": { this.lastname = value[1]; }
-//                case "Email": { this.email = value[1]; }
-//                case "Phone": { this.phone = value[1]; }
-//                case "Birthday": {
-//                    DateFormat dtf = new SimpleDateFormat("dd/MM/yyyy", Locale.FRANCE);
-//                    try {
-//                        this.birthday = dtf.parse(value[1]);
-//                    } catch (ParseException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//            }
-//        }
-//    }
 
     public String getFirstname() { return firstname; }
 
@@ -74,26 +50,17 @@ public class Colocataire {
 
     public void setBirthday(Date birthday) { this.birthday = birthday; }
 
-    public int getId() { return id; }
-
-    public void setId(int id) { this.id = id; }
-
     public Drawable getPicture() { return picture; }
 
     public void setPicture(Drawable picture) { this.picture = picture; }
 
-//    public void parse(String pathToFile) {
-//        Parser.addNode(pathToFile, "Colocation", "Colocataire", "");
-//        Parser.addNode(pathToFile, "Colocataire", "Id", String.valueOf(getId()));
-//        Parser.addNode(pathToFile, "Colocataire", "Firstname", getFirstname());
-//        Parser.addNode(pathToFile, "Colocataire", "Lastname", getLastname());
-//        Parser.addNode(pathToFile, "Colocataire", "Email", getEmail());
-//        Parser.addNode(pathToFile, "Colocataire", "Phone", getPhone());
-//        DateFormat dtf = new SimpleDateFormat("dd/MM/yyyy", Locale.FRANCE);
-//        Parser.addNode(pathToFile, "Colocataire", "Birthday", dtf.format(getBirthday()));
-//    }
-
+    @Override
     public String toString(){
         return this.getFirstname();
+    }
+
+    @Override
+    public boolean equals(Object o){
+        return (o instanceof Colocataire && ((Colocataire) o).getEmail().equals(this.getEmail()));
     }
 }

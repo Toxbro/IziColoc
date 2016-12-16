@@ -12,73 +12,78 @@ import java.util.HashMap;
 
 public class Colocation {
 
+    private static String id;
+
     private static ArrayList<Colocataire> colocataires = new ArrayList<>();
 
     private static HashMap<Colocataire, Account> accounts = new HashMap<>();
 
     private static ArrayList<Expense> expenses = new ArrayList<>();
 
-    public Colocation(){}
+    public static String getId() {
+        return id;
+    }
+
+    public static void setId(String id) {
+        Colocation.id = id;
+    }
 
     public static void addColocataire(Colocataire c){
         colocataires.add(c);
         accounts.put(c, new Account(c));
     }
 
-//    public static void addColocataires(String s){
-//        String[] splitted = s.split("/");
-//        for(String temp : splitted){
-//            addColocataire(new Colocataire(temp));
-//        }
-//    }
-
     public static ArrayList<Colocataire> getColocataires(){
         return colocataires;
     }
 
-    public static Colocataire getColocataire(int id) {
+    public static Colocataire getColocataireById(String id) {
         for(Colocataire c : colocataires){
-            if(c.getId() == id)
+            if(c.getEmail().equals(id))
                 return c;
         }
         return null;
     }
 
-    public static Colocataire getColocataire(String nom) {
+    public static Colocataire getColocataireByName(String nom) {
         for(Colocataire c : colocataires){
-            if(c.getFirstname().equals(nom))
+            String temp = c.getFirstname()+" "+c.getLastname();
+            if(temp.equals(nom))
                 return c;
         }
         return null;
     }
 
-//    public static void parse(String pathToFile){
-//        Parser.addNode(pathToFile, "root", "Colocation", "");
-//        for(Colocataire c : colocataires){
-//            c.parse(pathToFile);
-//        }
-//    }
-
-    public static int getBalance(Colocataire c){
+    public static float getBalance(Colocataire c){
         return accounts.get(c).getBalance();
     }
 
-    public static int getShare(Colocataire c, Colocataire d){
+    public static float getShare(Colocataire c, Colocataire d){
         return accounts.get(c).getShare(d);
     }
 
-    public static void addExpense(Colocataire c, Expense e){
+    public static void addExpense(Expense e){
         expenses.add(e);
-        accounts.get(c).addExpense(e);
+        accounts.get(e.getOwner()).addExpense(e);
     }
 
     public static ArrayList<Expense> getExpenses() {
-        Log.d("expenses", Arrays.toString(expenses.toArray()));
-        return expenses; }
+        return expenses;
+    }
 
-    public static void resetExpenses(){
+    public static void removeExpense(Expense e){
+        expenses.remove(e);
+        accounts.get(e.getOwner()).removeExpense(e);
+    }
+
+    public static void resetAccounts(){
         expenses = new ArrayList<>();
         accounts = new HashMap<>();
-        colocataires = new ArrayList<>();
+    }
+
+    public static void resetColoc(){
+        accounts.clear();
+        colocataires.clear();
+        expenses.clear();
     }
 }

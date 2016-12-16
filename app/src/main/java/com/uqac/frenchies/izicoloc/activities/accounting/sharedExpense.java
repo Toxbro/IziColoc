@@ -47,7 +47,7 @@ public class sharedExpense extends ArrayAdapter<String> {
 
                 tt1.setText(shared);
 
-                tt2.setText(amount);
+                tt2.setText(amount+" $");
         }
 
         return v;

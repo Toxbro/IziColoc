@@ -1,5 +1,6 @@
 package com.uqac.frenchies.izicoloc.activities.accounting;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -11,17 +12,34 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.facebook.FacebookSdk;
 import com.uqac.frenchies.izicoloc.R;
 import com.uqac.frenchies.izicoloc.tools.classes.Colocataire;
 import com.uqac.frenchies.izicoloc.tools.classes.Colocation;
 import com.uqac.frenchies.izicoloc.tools.classes.Expense;
+import com.uqac.frenchies.izicoloc.tools.classes.Profile;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 public class AccountingActivity extends AppCompatActivity{
+
+    private boolean dataCollected = false;
 
     //This is our tablayout
     private TabLayout tabLayout;
@@ -29,71 +47,22 @@ public class AccountingActivity extends AppCompatActivity{
     //This is our viewPager
     private ViewPager viewPager;
 
+    private SectionsPagerAdapter adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_accounting);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        Colocation.resetExpenses();
+        readDataFromDB();
 
-//        String path =  getFilesDir().getPath()+"/data.xml";
-
-////////////////////////////////////////////////////////////////////
-        Colocataire thomas = new Colocataire();
-        thomas.setId(1849);
-        thomas.setFirstname("Thomas");
-        thomas.setLastname("Navarro");
-        thomas.setEmail("thomas.navarro@live.fr");
-        thomas.setPhone("0606060606");
-        DateFormat dtf = new SimpleDateFormat("dd/MM/yyyy", Locale.FRANCE);
-        try {
-            thomas.setBirthday(dtf.parse("26/03/1994"));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        Colocataire quentin = new Colocataire();
-        quentin.setId(2016);
-        quentin.setFirstname("Quentin");
-        quentin.setLastname("Rollin");
-        quentin.setEmail("rollin.quentin@live.fr");
-        quentin.setPhone("0606060606");
-        try {
-            quentin.setBirthday(dtf.parse("05/04/1994"));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        Colocataire maxime = new Colocataire();
-        maxime.setId(1341);
-        maxime.setFirstname("Maxime");
-        maxime.setLastname("Roux");
-        maxime.setEmail("roux.maxime@live.fr");
-        maxime.setPhone("0606060606");
-        try {
-            maxime.setBirthday(dtf.parse("06/07/1994"));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-
-        Colocation.addColocataire(thomas);
-        Colocation.addColocataire(quentin);
-        Colocation.addColocataire(maxime);
-
-        Colocation.addExpense(quentin, new Expense(quentin, new Colocataire[]{quentin, maxime, thomas}, 100, "27/10/2016", "Courses"));
-        Colocation.addExpense(quentin, new Expense(quentin, new Colocataire[]{thomas}, 200, "05/11/2016", "Montréal"));
-        Colocation.addExpense(quentin, new Expense(quentin, new Colocataire[]{quentin, maxime}, 300, "12/11/2016", "Restaurant Montréal"));
-        Colocation.addExpense(quentin, new Expense(quentin, new Colocataire[]{maxime, thomas}, 400, "21/11/2016", "NYC"));
-        ////////////////////////////////////////////////////////////////////
-//
-//        coloc.parse(path);
 
         //Initializing viewPager
-        viewPager = (ViewPager) findViewById(R.id.pager);
+        /*viewPager = (ViewPager) findViewById(R.id.pager);
 
         SectionsPagerAdapter adapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
@@ -102,15 +71,8 @@ public class AccountingActivity extends AppCompatActivity{
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabLayout);
 
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-        tabLayout.setupWithViewPager(viewPager);
+        tabLayout.setupWithViewPager(viewPager);*/
     }
-
-    /*@Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_accounting, menu);
-        return true;
-    }*/
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -126,6 +88,8 @@ public class AccountingActivity extends AppCompatActivity{
 
         return super.onOptionsItemSelected(item);
     }
+
+
 
 
     /**
@@ -172,5 +136,73 @@ public class AccountingActivity extends AppCompatActivity{
             }
             return null;
         }
+    }
+
+    private void addExpense(JSONObject objet){
+        String shares = null;
+        try {
+            shares = objet.getString("share_user_depense");
+
+        String[] sharesColoc = shares.split(",");
+        Colocataire[] sharesColocList = new Colocataire[sharesColoc.length];
+        for (int j = 0; j < sharesColoc.length; j++) {
+            sharesColocList[j] = Colocation.getColocataireById(sharesColoc[j]);
+        }
+
+        Colocation.addExpense(new Expense(Colocation.getColocataireById(objet.getString("user_depense")),
+                sharesColocList, Float.parseFloat(objet.getString("montant_depense")),
+                objet.getString("date_depense"), objet.getString("libelle_depense")));
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void readDataFromDB(){
+        String setUrl = "http://maelios.zapto.org/izicoloc/getDepenseByColoc.php";
+        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+
+        StringRequest request = new StringRequest(Request.Method.POST, setUrl, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONArray data = (new JSONObject(response)).getJSONArray("getDepenseByColoc");
+                    System.out.println(data.toString());
+                    if(data.length()!=0){
+                        for (int i = 0; i < data.length(); i++) {
+                            addExpense(data.getJSONObject(i));
+                        }
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                dataCollected = true;
+                //Initializing viewPager
+                viewPager = (ViewPager) findViewById(R.id.pager);
+
+                adapter = new SectionsPagerAdapter(getSupportFragmentManager());
+
+                viewPager.setAdapter(adapter);
+
+                TabLayout tabLayout = (TabLayout) findViewById(R.id.tabLayout);
+
+                viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+                tabLayout.setupWithViewPager(viewPager);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("code_coloc", Colocation.getId());
+
+                return params;
+            }
+        };
+        requestQueue.add(request);
     }
 }
