@@ -26,10 +26,6 @@
         <activity
             android:name=".activities.authentication.Login"
             android:label="@string/app_name">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name="com.facebook.FacebookActivity"
@@ -50,7 +46,18 @@
         <activity android:name=".activities.roommates.GestionColocValidation"/>
         <activity
             android:name=".activities.listecourses.MainCourses"
-            android:label="Courses">
+            android:label="Courses"
+            android:screenOrientation="portrait">
+            <uses-permission android:name="android.permission.INTERNET"/>
+        </activity>
+        <activity
+            android:name=".activities.menus_semaine.ActivityMenusSemaine"
+            android:label="MenusSemaine">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <uses-permission android:name="android.permission.INTERNET"/>
         </activity>
     </application>
 

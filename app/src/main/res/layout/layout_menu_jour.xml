@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Jour -->
+    <TextView
+        android:id="@+id/jour"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/black"
+        android:layout_marginLeft="10dp"
+        android:layout_marginBottom="5dp"
+        android:textStyle="bold"
+        android:text="Aujourd'hui"
+        android:background="@android:color/darker_gray"
+        android:textSize="30dp"
+        />
+
+    <!-- Midi -->
+    <TextView
+        android:id="@+id/menuMidiTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginBottom="3dp"
+        android:textColor="@android:color/darker_gray"
+        android:text="Midi"
+        android:textSize="20dp"
+        />
+
+    <TextView
+        android:id="@+id/menuMidi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/menuMidiTxt"
+        android:textColor="@android:color/black"
+        android:text="Midi"
+        android:textSize="25dp"
+        />
+
+    <!-- Soir -->
+    <TextView
+        android:id="@+id/menuSoirTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:textColor="@android:color/darker_gray"
+        android:text="Soir"
+        android:textSize="20dp"
+        />
+
+    <TextView
+        android:id="@+id/menuSoir"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/menuSoirTxt"
+        android:textColor="@android:color/black"
+        android:text="Soir"
+        android:textSize="25dp"
+        />
+
+</LinearLayout>
