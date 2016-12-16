@@ -84,4 +84,10 @@ public class Colocation {
             accounts.put(c, new Account(c));
         }
     }
+
+    public static void resetColoc(){
+        accounts.clear();
+        colocataires.clear();
+        expenses.clear();
+    }
 }
