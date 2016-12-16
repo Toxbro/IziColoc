@@ -54,31 +54,9 @@ public class AccountingActivity extends AppCompatActivity{
 
         super.onCreate(savedInstanceState);
 
-        FacebookSdk.sdkInitialize(getApplicationContext());
-
         setContentView(R.layout.activity_accounting);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        Colocation.resetAccounts();
-
-        Profile.setEmail("mr@test.com");
-        Profile.setFirstname("Maxime");
-        Profile.setLastname("Roux");
-        Colocation.setId("AAX9878");
-
-        Colocataire maxime = new Colocataire();
-        maxime.setLastname("Roux");
-        maxime.setFirstname("Maxime");
-        maxime.setEmail("mr@test.com");
-
-        Colocataire dylan = new Colocataire();
-        dylan.setEmail("dj@android.fr");
-        dylan.setLastname("Jacquin");
-        dylan.setFirstname("Dylan");
-
-        Colocation.addColocataire(maxime);
-        Colocation.addColocataire(dylan);
 
         readDataFromDB();
 
