@@ -16,6 +16,8 @@ import com.uqac.frenchies.izicoloc.tools.classes.Colocataire;
 import com.uqac.frenchies.izicoloc.tools.classes.Colocation;
 import com.uqac.frenchies.izicoloc.tools.classes.Profile;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -23,6 +25,9 @@ import java.util.Map;
 import static java.lang.Math.round;
 
 public class PersonalAccountingFragment extends Fragment {
+
+    private String expensesText;
+    private ArrayList<String> result;
     /**
      * The fragment argument representing the section number for this
      * fragment.
@@ -38,9 +43,6 @@ public class PersonalAccountingFragment extends Fragment {
      */
     public static PersonalAccountingFragment newInstance() {
         PersonalAccountingFragment fragment = new PersonalAccountingFragment();
-//        Bundle args = new Bundle();
-//        args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-//        fragment.setArguments(args);
         return fragment;
     }
 
@@ -50,10 +52,22 @@ public class PersonalAccountingFragment extends Fragment {
 
         View rootView = inflater.inflate(R.layout.fragment_personalaccounting, container, false);
 
-        Colocataire owner = Colocation.getColocataireById(Profile.getEmail());
+        updateData();
 
         TextView expenses = (TextView) rootView.findViewById(R.id.expenses);
-        expenses.setText(String.valueOf("Balance : "+Colocation.getBalance(owner)+" $"));
+        expenses.setText(expensesText);
+
+        ArrayAdapter<String> adapter = new sharedExpense(this.getContext(), 0, result);
+        ListView expensesList = (ListView) rootView.findViewById(R.id.sharedExpensesList);
+
+        expensesList.setAdapter(adapter);
+        return rootView;
+    }
+
+    private void updateData(){
+        Colocataire owner = Colocation.getColocataireById(Profile.getEmail());
+
+        expensesText = String.valueOf("Balance : "+Colocation.getBalance(owner)+" $");
 
         HashMap<String, Float> shares = new HashMap<>();
         for(Colocataire c : Colocation.getColocataires()){
@@ -61,15 +75,9 @@ public class PersonalAccountingFragment extends Fragment {
         }
         shares.remove(owner.getFirstname());
 
-        ArrayList<String> result = new ArrayList<>();
+        result = new ArrayList<>();
         for(Map.Entry<String, Float> entry : shares.entrySet()){
             result.add(entry.getKey()+":"+String.valueOf(round(entry.getValue())));
         }
-
-        ArrayAdapter<String> adapter = new sharedExpense(this.getContext(), 0, result);
-        ListView expensesList = (ListView) rootView.findViewById(R.id.sharedExpensesList);
-
-        expensesList.setAdapter(adapter);
-        return rootView;
     }
 }

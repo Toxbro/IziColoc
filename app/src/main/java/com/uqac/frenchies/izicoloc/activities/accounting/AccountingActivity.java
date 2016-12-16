@@ -19,6 +19,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.facebook.FacebookSdk;
 import com.uqac.frenchies.izicoloc.R;
 import com.uqac.frenchies.izicoloc.tools.classes.Colocataire;
 import com.uqac.frenchies.izicoloc.tools.classes.Colocation;
@@ -38,26 +39,52 @@ import java.util.Map;
 
 public class AccountingActivity extends AppCompatActivity{
 
+    private boolean dataCollected = false;
+
     //This is our tablayout
     private TabLayout tabLayout;
 
     //This is our viewPager
     private ViewPager viewPager;
 
+    private SectionsPagerAdapter adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+
+        FacebookSdk.sdkInitialize(getApplicationContext());
+
         setContentView(R.layout.activity_accounting);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         Colocation.resetAccounts();
 
+        Profile.setEmail("mr@test.com");
+        Profile.setFirstname("Maxime");
+        Profile.setLastname("Roux");
+        Colocation.setId("AAX9878");
+
+        Colocataire maxime = new Colocataire();
+        maxime.setLastname("Roux");
+        maxime.setFirstname("Maxime");
+        maxime.setEmail("mr@test.com");
+
+        Colocataire dylan = new Colocataire();
+        dylan.setEmail("dj@android.fr");
+        dylan.setLastname("Jacquin");
+        dylan.setFirstname("Dylan");
+
+        Colocation.addColocataire(maxime);
+        Colocation.addColocataire(dylan);
+
         readDataFromDB();
 
+
         //Initializing viewPager
-        viewPager = (ViewPager) findViewById(R.id.pager);
+        /*viewPager = (ViewPager) findViewById(R.id.pager);
 
         SectionsPagerAdapter adapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
@@ -66,15 +93,8 @@ public class AccountingActivity extends AppCompatActivity{
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabLayout);
 
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-        tabLayout.setupWithViewPager(viewPager);
+        tabLayout.setupWithViewPager(viewPager);*/
     }
-
-    /*@Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_accounting, menu);
-        return true;
-    }*/
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -90,6 +110,8 @@ public class AccountingActivity extends AppCompatActivity{
 
         return super.onOptionsItemSelected(item);
     }
+
+
 
 
     /**
@@ -138,34 +160,56 @@ public class AccountingActivity extends AppCompatActivity{
         }
     }
 
+    private void addExpense(JSONObject objet){
+        String shares = null;
+        try {
+            shares = objet.getString("share_user_depense");
+
+        String[] sharesColoc = shares.split(",");
+        Colocataire[] sharesColocList = new Colocataire[sharesColoc.length];
+        for (int j = 0; j < sharesColoc.length; j++) {
+            sharesColocList[j] = Colocation.getColocataireById(sharesColoc[j]);
+        }
+
+        Colocation.addExpense(new Expense(Colocation.getColocataireById(objet.getString("user_depense")),
+                sharesColocList, Float.parseFloat(objet.getString("montant_depense")),
+                objet.getString("date_depense"), objet.getString("libelle_depense")));
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
     private void readDataFromDB(){
-        String setUrl = "http://maelios.zapto.org/izicoloc/getDepensesByColoc.php";
-        RequestQueue requestQueue;
-        requestQueue = Volley.newRequestQueue(getApplicationContext());
+        String setUrl = "http://maelios.zapto.org/izicoloc/getDepenseByColoc.php";
+        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
 
         StringRequest request = new StringRequest(Request.Method.POST, setUrl, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
-                    JSONArray data = (new JSONObject(response)).getJSONArray("getDepensesByColoc");
+                    JSONArray data = (new JSONObject(response)).getJSONArray("getDepenseByColoc");
+                    System.out.println(data.toString());
                     if(data.length()!=0){
                         for (int i = 0; i < data.length(); i++) {
-                            JSONObject objet = data.getJSONObject(i);
-
-                            String shares = objet.getString("share_user_depense");
-                            String[] sharesColoc = shares.split(",");
-                            Colocataire[] sharesColocList = new Colocataire[sharesColoc.length];
-                            for (int j = 0; j < sharesColoc.length; j++)
-                                sharesColocList[j] = Colocation.getColocataireById(sharesColoc[j]);
-
-                            Colocation.addExpense(new Expense(Colocation.getColocataireById(objet.getString("user_depense")),
-                                    sharesColocList, Float.parseFloat(objet.getString("montant_depense")),
-                                    objet.getString("date_depense"), objet.getString("libelle_depense")));
+                            addExpense(data.getJSONObject(i));
                         }
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+                dataCollected = true;
+                //Initializing viewPager
+                viewPager = (ViewPager) findViewById(R.id.pager);
+
+                adapter = new SectionsPagerAdapter(getSupportFragmentManager());
+
+                viewPager.setAdapter(adapter);
+
+                TabLayout tabLayout = (TabLayout) findViewById(R.id.tabLayout);
+
+                viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+                tabLayout.setupWithViewPager(viewPager);
             }
         }, new Response.ErrorListener() {
             @Override

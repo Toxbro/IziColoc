@@ -47,4 +47,8 @@ public class Expense {
         return date;
     }
 
+    public String toString(){
+        return new String(this.owner+","+this.amount+","+this.label);
+    }
+
 }

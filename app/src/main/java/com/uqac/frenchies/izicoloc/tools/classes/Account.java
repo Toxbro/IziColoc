@@ -50,4 +50,9 @@ public class Account {
         else
             return 0;
     }
+
+    @Override
+    public String toString(){
+        return new String(this.owner+" "+this.getBalance());
+    }
 }

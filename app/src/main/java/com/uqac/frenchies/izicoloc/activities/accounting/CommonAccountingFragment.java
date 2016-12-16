@@ -9,6 +9,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.ViewPager;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -53,6 +54,8 @@ import static com.facebook.FacebookSdk.getApplicationContext;
  */
 
 public class CommonAccountingFragment extends Fragment{
+
+    private ArrayAdapter<Expense> adapter = null;
     /**
      * The fragment argument representing the section number for this
      * fragment.
@@ -89,7 +92,7 @@ public class CommonAccountingFragment extends Fragment{
             }
         });
 
-        final ArrayAdapter<Expense> adapter = new listExpense(this.getContext(), 0, Colocation.getExpenses());
+        adapter = new listExpense(this.getContext(), 0, Colocation.getExpenses());
         ListView expensesList = (ListView) rootView.findViewById(R.id.commonExpensesList);
 
         expensesList.setAdapter(adapter);
@@ -114,12 +117,6 @@ public class CommonAccountingFragment extends Fragment{
                     Expense e = adapter.getItem(pos);
                     adapter.remove(e);
                     Colocation.removeExpense(e);
-
-                    Fragment frg = getActivity().getSupportFragmentManager().findFragmentByTag("PersonalAccountingFragment");
-                    final FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-                    ft.detach(frg);
-                    ft.attach(frg);
-                    ft.commit();
 
                         removeExpenseFromDB(e);
                     }
@@ -191,12 +188,15 @@ public class CommonAccountingFragment extends Fragment{
                                 && !amount.getText().toString().equals("")
                                 && !date.getText().toString().equals("")
                                 && !label.getText().toString().equals("")) {
-                                    Colocation.addExpense(new Expense(
-                                        Colocation.getColocataireById(Profile.getEmail()),
-                                        sharedWithColocs,
-                                        Integer.parseInt(amount.getText().toString()),
-                                        date.getText().toString(),
-                                        label.getText().toString()));
+                            Expense e = new Expense(
+                                    Colocation.getColocataireById(Profile.getEmail()),
+                                    sharedWithColocs,
+                                    Integer.parseInt(amount.getText().toString()),
+                                    date.getText().toString(),
+                                    label.getText().toString());
+                            Colocation.addExpense(e);
+                            addExpenseDB(e);
+                            adapter.notifyDataSetChanged();
                         }
                         else{
                             Toast.makeText(getContext(), "Un champ est vide !", Toast.LENGTH_LONG).show();
@@ -280,6 +280,42 @@ public class CommonAccountingFragment extends Fragment{
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("code_coloc", Colocation.getId());
                 params.put("user_depense", e.getOwner().getEmail());
+                params.put("libelle_depense", e.getLabel());
+
+                return params;
+            }
+        };
+        requestQueue.add(request);
+    }
+
+    private void addExpenseDB(final Expense e){
+        String setUrl = "http://maelios.zapto.org/izicoloc/insertDepense.php";
+        RequestQueue requestQueue;
+        requestQueue = Volley.newRequestQueue(getApplicationContext());
+
+        StringRequest request = new StringRequest(Request.Method.POST, setUrl, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("code_coloc", Colocation.getId());
+                params.put("user_depense", e.getOwner().getEmail());
+                params.put("date_depense", e.getDate());
+                params.put("montant_depense", String.valueOf(e.getAmount()));
+                String shares = "";
+                for(Colocataire c : e.getShares())
+                    shares += c.getEmail()+",";
+                shares = shares.substring(0, shares.length()-1);
+                params.put("share_user_depense", shares);
                 params.put("libelle_depense", e.getLabel());
 
                 return params;

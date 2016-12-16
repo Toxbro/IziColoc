@@ -68,7 +68,6 @@ public class Colocation {
     }
 
     public static ArrayList<Expense> getExpenses() {
-        Log.d("expenses", Arrays.toString(expenses.toArray()));
         return expenses;
     }
 
@@ -80,9 +79,6 @@ public class Colocation {
     public static void resetAccounts(){
         expenses = new ArrayList<>();
         accounts = new HashMap<>();
-        for(Colocataire c : colocataires){
-            accounts.put(c, new Account(c));
-        }
     }
 
     public static void resetColoc(){

@@ -54,7 +54,13 @@ public class Colocataire {
 
     public void setPicture(Drawable picture) { this.picture = picture; }
 
+    @Override
     public String toString(){
         return this.getFirstname();
+    }
+
+    @Override
+    public boolean equals(Object o){
+        return (o instanceof Colocataire && ((Colocataire) o).getEmail().equals(this.getEmail()));
     }
 }

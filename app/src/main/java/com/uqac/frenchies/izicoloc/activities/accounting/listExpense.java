@@ -12,6 +12,8 @@ import com.uqac.frenchies.izicoloc.R;
 import com.uqac.frenchies.izicoloc.tools.classes.Colocataire;
 import com.uqac.frenchies.izicoloc.tools.classes.Expense;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -54,8 +56,9 @@ public class listExpense extends ArrayAdapter<Expense> {
             tt4.setText(String.valueOf(e.getAmount())+ " $");
 
             String shares = "";
+            System.out.println(Arrays.deepToString(e.getShares()));
             for(Colocataire c : e.getShares())
-                shares += c.getFirstname()+" ,";
+                shares += c.getFirstname()+", ";
             shares = shares.substring(0, shares.length()-2);
             tt5.setText(shares);
         }
