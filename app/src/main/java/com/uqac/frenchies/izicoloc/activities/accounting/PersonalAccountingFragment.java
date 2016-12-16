@@ -14,10 +14,13 @@ import android.widget.TextView;
 import com.uqac.frenchies.izicoloc.R;
 import com.uqac.frenchies.izicoloc.tools.classes.Colocataire;
 import com.uqac.frenchies.izicoloc.tools.classes.Colocation;
+import com.uqac.frenchies.izicoloc.tools.classes.Profile;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
+import static java.lang.Math.round;
 
 public class PersonalAccountingFragment extends Fragment {
     /**
@@ -47,35 +50,20 @@ public class PersonalAccountingFragment extends Fragment {
 
         View rootView = inflater.inflate(R.layout.fragment_personalaccounting, container, false);
 
-        FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-
-//                getString(R.string.cost)
-            }
-        });
-
-//        String path = this.getArguments().getString("path");
-//
-//        String data = Parser.getAllInformation(path, "root").toString();
-
-        Colocataire quentin = Colocation.getColocataire("Quentin");
+        Colocataire owner = Colocation.getColocataireById(Profile.getEmail());
 
         TextView expenses = (TextView) rootView.findViewById(R.id.expenses);
-        expenses.setText(String.valueOf("Balance : "+Colocation.getBalance(quentin)));
+        expenses.setText(String.valueOf("Balance : "+Colocation.getBalance(owner)+" $"));
 
-        HashMap<String, Integer> shares = new HashMap<>();
+        HashMap<String, Float> shares = new HashMap<>();
         for(Colocataire c : Colocation.getColocataires()){
-            shares.put(c.getFirstname(), Colocation.getShare(quentin, c));
+            shares.put(c.getFirstname(), Colocation.getShare(owner, c) - Colocation.getShare(c, owner));
         }
-        shares.remove(quentin.getFirstname());
+        shares.remove(owner.getFirstname());
 
         ArrayList<String> result = new ArrayList<>();
-        for(Map.Entry<String, Integer> entry : shares.entrySet()){
-            result.add(entry.getKey()+":"+String.valueOf(entry.getValue()));
+        for(Map.Entry<String, Float> entry : shares.entrySet()){
+            result.add(entry.getKey()+":"+String.valueOf(round(entry.getValue())));
         }
 
         ArrayAdapter<String> adapter = new sharedExpense(this.getContext(), 0, result);

@@ -1,16 +1,52 @@
 package com.uqac.frenchies.izicoloc.activities.accounting;
 
+import android.app.AlertDialog;
+import android.app.DatePickerDialog;
+import android.content.DialogInterface;
+import android.graphics.Color;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.uqac.frenchies.izicoloc.R;
+import com.uqac.frenchies.izicoloc.tools.classes.Colocataire;
 import com.uqac.frenchies.izicoloc.tools.classes.Colocation;
 import com.uqac.frenchies.izicoloc.tools.classes.Expense;
+import com.uqac.frenchies.izicoloc.tools.classes.Profile;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+
+import static com.facebook.FacebookSdk.getApplicationContext;
 
 /**
  * Created by quentin on 16-11-20.
@@ -42,63 +78,213 @@ public class CommonAccountingFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-//        ////////////////////////////////////////////////////////////////////
-//        Colocataire thomas = new Colocataire();
-//        thomas.setId(1849);
-//        thomas.setFirstname("Thomas");
-//        thomas.setLastname("Navarro");
-//        thomas.setEmail("thomas.navarro@live.fr");
-//        thomas.setPhone("0606060606");
-//        DateFormat dtf = new SimpleDateFormat("dd/MM/yyyy", Locale.FRANCE);
-//        try {
-//            thomas.setBirthday(dtf.parse("26/03/1994"));
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//        }
-//
-//        Colocataire quentin = new Colocataire();
-//        quentin.setId(2016);
-//        quentin.setFirstname("Quentin");
-//        quentin.setLastname("Rollin");
-//        quentin.setEmail("rollin.quentin@live.fr");
-//        quentin.setPhone("0606060606");
-//        try {
-//            quentin.setBirthday(dtf.parse("05/04/1994"));
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//        }
-//
-//        Colocataire maxime = new Colocataire();
-//        quentin.setId(1341);
-//        quentin.setFirstname("Maxime");
-//        quentin.setLastname("Roux");
-//        quentin.setEmail("roux.maxime@live.fr");
-//        quentin.setPhone("0606060606");
-//        try {
-//            quentin.setBirthday(dtf.parse("06/07/1994"));
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//        }
-//
-//        Colocation.addColocataire(thomas);
-//        Colocation.addColocataire(quentin);
-//        Colocation.addColocataire(maxime);
-//
-//        Colocation.addExpense(quentin, new Expense(quentin, new Colocataire[]{quentin, maxime, thomas}, 100, "27/10/2016", "Courses"));
-//        Colocation.addExpense(quentin, new Expense(quentin, new Colocataire[]{thomas}, 200, "05/11/2016", "Montréal"));
-//        Colocation.addExpense(quentin, new Expense(quentin, new Colocataire[]{quentin, maxime}, 300, "12/11/2016", "Restaurant Montréal"));
-//        Colocation.addExpense(quentin, new Expense(quentin, new Colocataire[]{maxime, thomas}, 400, "21/11/2016", "NYC"));
-//        ////////////////////////////////////////////////////////////////////
 
         View rootView = inflater.inflate(R.layout.fragment_commonaccounting, container, false);
 
-        ArrayAdapter<Expense> adapter = new listExpense(this.getContext(), 0, Colocation.getExpenses());
+        FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addExpenseDialog();
+            }
+        });
+
+        final ArrayAdapter<Expense> adapter = new listExpense(this.getContext(), 0, Colocation.getExpenses());
         ListView expensesList = (ListView) rootView.findViewById(R.id.commonExpensesList);
 
         expensesList.setAdapter(adapter);
 
-//            TextView LastName = (TextView) rootView.findViewById(R.id.LastName);
-//            LastName.setText(Profile.getLastname());
+        expensesList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                removeExpenseDialog(adapter, position);
+                return false;
+            }
+        });
         return rootView;
+    }
+
+    private void removeExpenseDialog(final ArrayAdapter<Expense> adapter, final int pos){
+        new AlertDialog.Builder(getActivity())
+                .setTitle("Voulez-vous supprimer cette dépense ?")
+                .setPositiveButton("Supprimer", new DialogInterface.OnClickListener()
+                {
+                    public void onClick(DialogInterface dialog, int whichButton)
+                    {
+                    Expense e = adapter.getItem(pos);
+                    adapter.remove(e);
+                    Colocation.removeExpense(e);
+
+                    Fragment frg = getActivity().getSupportFragmentManager().findFragmentByTag("PersonalAccountingFragment");
+                    final FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+                    ft.detach(frg);
+                    ft.attach(frg);
+                    ft.commit();
+
+                        removeExpenseFromDB(e);
+                    }
+                })
+                .setNegativeButton("Annuler", new DialogInterface.OnClickListener()
+                {
+                    public void onClick(DialogInterface dialog, int whichButton){
+                        dialog.dismiss();
+                    }
+                })
+                .show();
+    }
+
+    private void addExpenseDialog()
+    {
+        final View view = LayoutInflater.from(getContext()).inflate(R.layout.dialog_addexpense, null);
+
+        final EditText label = (EditText) view.findViewById(R.id.label);
+        final EditText shares = (EditText) view.findViewById(R.id.shares);
+        final EditText date = (EditText) view.findViewById(R.id.date);
+        final EditText amount = (EditText) view.findViewById(R.id.amount);
+
+        shares.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v){
+                setShareMatesDialog(shares);
+            }
+        });
+
+        date.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Calendar c = Calendar.getInstance();
+
+                DatePickerDialog dpd = new DatePickerDialog(getActivity(),
+                        new DatePickerDialog.OnDateSetListener() {
+
+                            @Override
+                            public void onDateSet(DatePicker view, int year,
+                                                  int monthOfYear, int dayOfMonth) {
+                                c.set(Calendar.YEAR, year);
+                                c.set(Calendar.MONTH, monthOfYear);
+                                c.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                                String myFormat = "dd/MM/yyyy";
+                                SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.FRENCH);
+                                date.setText(sdf.format(c.getTime()));
+
+                            }
+                        }, c.get(Calendar.YEAR),c.get(Calendar.MONTH),c.get(Calendar.DATE));
+                dpd.show();
+            }
+        });
+
+        new AlertDialog.Builder(getActivity())
+                .setView(view)
+                .setPositiveButton("Ajouter", new DialogInterface.OnClickListener()
+                {
+                    public void onClick(DialogInterface dialog, int whichButton)
+                    {
+
+                        String[] shareList = shares.getText().toString().split(", ");
+                        Colocataire[] sharedWithColocs = new Colocataire[shareList.length];
+
+                        for (int i = 0; i < shareList.length; i++) {
+                            sharedWithColocs[i] = Colocation.getColocataireByName(shareList[i]);
+                        }
+
+                        if(sharedWithColocs.length != 0
+                                && !amount.getText().toString().equals("")
+                                && !date.getText().toString().equals("")
+                                && !label.getText().toString().equals("")) {
+                                    Colocation.addExpense(new Expense(
+                                        Colocation.getColocataireById(Profile.getEmail()),
+                                        sharedWithColocs,
+                                        Integer.parseInt(amount.getText().toString()),
+                                        date.getText().toString(),
+                                        label.getText().toString()));
+                        }
+                        else{
+                            Toast.makeText(getContext(), "Un champ est vide !", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                })
+                .setNegativeButton("Annuler", new DialogInterface.OnClickListener()
+                {
+                    public void onClick(DialogInterface dialog, int whichButton){
+                        dialog.dismiss();
+                    }
+                })
+                .show();
+    }
+
+    private void setShareMatesDialog(final EditText shares){
+        final ArrayList SelectedItems = new ArrayList();  // Where we track the selected items
+        ArrayList<Colocataire> colocs = Colocation.getColocataires();
+        final String[] names = new String[colocs.size()];
+
+        int i = 0;
+
+        for(Colocataire c : colocs){
+            names[i] = c.getFirstname() + " " + c.getLastname();
+            i++;
+        }
+
+        new AlertDialog.Builder(getActivity())
+            .setMultiChoiceItems(names, null,
+                new DialogInterface.OnMultiChoiceClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which,
+                                        boolean isChecked) {
+                        if (isChecked) {
+                            // If the user checked the item, add it to the selected items
+                            SelectedItems.add(which);
+                        } else if (SelectedItems.contains(which)) {
+                            // Else, if the item is already in the array, remove it
+                            SelectedItems.remove(Integer.valueOf(which));
+                        }
+                    }
+                })
+            // Set the action buttons
+            .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int id) {
+                    String result = "";
+                    for (int j = 0; j < SelectedItems.size(); j++) {
+                        result += names[(int) SelectedItems.get(j)] +", ";
+                    }
+                    shares.setText(result);
+                }
+            })
+            .setNegativeButton("Annuler", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int id) {
+                    dialog.dismiss();
+                }
+            })
+        .show();
+    }
+
+    private void removeExpenseFromDB(final Expense e){
+        String setUrl = "http://maelios.zapto.org/izicoloc/deleteDepense.php";
+        RequestQueue requestQueue;
+        requestQueue = Volley.newRequestQueue(getApplicationContext());
+
+        StringRequest request = new StringRequest(Request.Method.POST, setUrl, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("code_coloc", Colocation.getId());
+                params.put("user_depense", e.getOwner().getEmail());
+                params.put("libelle_depense", e.getLabel());
+
+                return params;
+            }
+        };
+        requestQueue.add(request);
     }
 }

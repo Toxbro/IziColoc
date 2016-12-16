@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.uqac.frenchies.izicoloc.R;
+import com.uqac.frenchies.izicoloc.tools.classes.Colocataire;
 import com.uqac.frenchies.izicoloc.tools.classes.Expense;
 
 import java.util.List;
@@ -45,11 +46,18 @@ public class listExpense extends ArrayAdapter<Expense> {
             TextView tt2 = (TextView) v.findViewById(R.id.date);
             TextView tt3 = (TextView) v.findViewById(R.id.owner);
             TextView tt4 = (TextView) v.findViewById(R.id.amount);
+            TextView tt5 = (TextView) v.findViewById(R.id.shared);
 
             tt1.setText(e.getLabel());
             tt2.setText(e.getDate());
             tt3.setText(e.getOwner().getFirstname());
-            tt4.setText(String.valueOf(e.getAmount()));
+            tt4.setText(String.valueOf(e.getAmount())+ " $");
+
+            String shares = "";
+            for(Colocataire c : e.getShares())
+                shares += c.getFirstname()+" ,";
+            shares = shares.substring(0, shares.length()-2);
+            tt5.setText(shares);
         }
 
         return v;
