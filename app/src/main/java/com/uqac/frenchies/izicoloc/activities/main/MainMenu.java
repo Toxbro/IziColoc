@@ -107,8 +107,17 @@ public class MainMenu extends AppCompatActivity
         accountingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainMenu.this, AccountingActivity.class);
-                MainMenu.this.startActivity(intent);
+                if(codeColoc.isEmpty()){
+                    Intent intent = new Intent(MainMenu.this, GestionColocMain.class);
+                    intent.putExtra("idUser",idUser);
+                    startActivity(intent);
+                }else{
+                    Intent intent = new Intent(MainMenu.this, AccountingActivity.class);
+                    intent.putExtra("idUser",idUser);
+                    intent.putExtra("codeColoc",getCodeColoc());
+                    MainMenu.this.startActivity(intent);
+                }
+
             }
         });
 
@@ -117,8 +126,16 @@ public class MainMenu extends AppCompatActivity
             @Override
             public void onClick(View v) {
                 //Activité de Dylan
-                Intent myIntent = new Intent(MainMenu.this, MainCourses.class);
-                MainMenu.this.startActivity(myIntent);
+                if(codeColoc.isEmpty()){
+                    Intent intent = new Intent(MainMenu.this, GestionColocMain.class);
+                    intent.putExtra("idUser",idUser);
+                    startActivity(intent);
+                }else {
+                    Intent myIntent = new Intent(MainMenu.this, MainCourses.class);
+                    myIntent.putExtra("idUser",idUser);
+                    myIntent.putExtra("codeColoc",getCodeColoc());
+                    MainMenu.this.startActivity(myIntent);
+                }
             }
         });
     }
